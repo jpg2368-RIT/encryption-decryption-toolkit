@@ -44,6 +44,33 @@ def gcd(a: int, b: int, log: bool = False) -> int:
     else:
         return gcd(b, a % b, log)
     
+def gcd_show(a: int, b: int):
+    """
+    Computes the GCD of two numbers and prints the steps as if solving by hand
+
+    :param a: Number 1
+    :param b: Number 2
+    :param log: If the log of hand computation should be printed out
+    :return: The GCD of a and b
+    """
+    n1 = max(a, b)
+    n2 = min(a, b)
+    r = n1 % n2
+    q = n1 // n2
+    res = -1
+    print(f"q\tn1\tn2\tr")
+    print("-"*20)
+    while r != 0:
+        print(f"{q}\t{n1}\t{n2}\t{r}")
+        res = r
+        n1 = n2
+        n2 = r
+        q = n1 // n2
+        r = n1 % n2
+    print(f"{q}\t{n1}\t{n2}\t{r}")
+    return res
+
+
 def euler_totient_quick(n: int):
     """
     Computes the Euler Totient Function of a number
@@ -124,17 +151,3 @@ def euler_totient_temp(n: int, log: bool = False) -> int:
     for i in prime_factors:
         res *= (1-(1/i))
     return int(res)
-
-# for iter in [928, 929, 932, 933, 934, 935, 936]:
-#     print(f"For {iter}:")
-#     print(euler_totient_temp(iter, True))
-#     print("-"*40)
-
-#TODO this
-
-x = "1001001001101101100100100110"
-y = "1011110000110001001010110001"
-res = ""
-for i in range(len(x)):
-    res += str(int(x[i]) ^ int(y[i]))
-print(str(res))
