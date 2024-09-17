@@ -70,7 +70,6 @@ def gcd_show(a: int, b: int):
     print(f"{q}\t{n1}\t{n2}\t{r}")
     return res
 
-
 def euler_totient_quick(n: int):
     """
     Computes the Euler Totient Function of a number

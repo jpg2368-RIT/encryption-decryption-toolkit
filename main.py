@@ -1,19 +1,8 @@
-from pylfsr import LFSR
-
+from LFSRs import *
 from text_ciphers import *
 from math_things import *
+from DES import *
 
-
-def lfsr_table(l: LFSR, n:int = -1) -> None:
-    if n == -1:
-        n = (2**len(l.state))-1
-    print('count \t state \t\toutbit \t seq')
-    print('-'*50)
-    for _ in range(n):
-        print(l.count,l.state, '', l.outbit,l.seq, sep='\t')
-        l.next()
-    print('-'*50)
-    print('Output: ', l.seq)
 
 def hw1():
     print(find_mod_inverse(7, 26))
@@ -63,7 +52,7 @@ def hw2():
     # lf32.Viz(title="x^5 + x^3 + x^2 + 1 with one 1", show_labels=True)
     # print("")
 
-    #Q5 TODO: finish this
+    #Q5?
     # x = "1001001001101101100100100110"
     # y = "1011110000110001001010110001"
     # res = ""
@@ -71,20 +60,9 @@ def hw2():
     #     res += str(int(x[i]) ^ int(y[i]))
     # res = str(res)
     # print(res)
-    # for i in range(2):
-    #     for j in range(2):
-    #         for k in range(2):
-    #             on = [i, j, k]
-    #             fp = []
-    #             for n, c in enumerate(on):
-    #                 if c == 1:
-    #                     fp.append(3 - n)
-    #             if fp != [] and len(fp)>1:
-    #                 lf5 = LFSR(initstate=[0,0,1], fpoly=fp)
-    #                 lf5.runKCycle(len(res))
-    #                 if str(lf5.seq) == res:
-    #                     print(f"Found coeffs: {lf5.fpoly}")
-    
+    # l5 = LFSR(initstate=[0, 0, 1], fpoly=[3, 1])
+    # lfsr_table(l5, len(x))
+    # l5.Viz()
     
     #Q6
     # for n in [4, 5, 9, 26]:
