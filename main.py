@@ -94,9 +94,13 @@ def hw2():
     #     print("-"*40)
     pass
 
+def hw3():
+    pass
+
 def main():
     # hw1()
-    hw2()
+    # hw2()
+    hw3()
 
     # for k in [5, 12, 13]:
     #     print(f"5^-1 in mod {k} = {find_mod_inverse(5, k)}")
