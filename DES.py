@@ -1,32 +1,32 @@
 from DES_tables import *
 
-def split_bits(bits: str, number_per_group: int = -1, number_of_groups: int = -1, keep_extra: bool = False) -> list:
+def split_bits(bits: str, per_group: int = -1, num_groups: int = -1, keep_extra: bool = False) -> list:
     """
     Splits the input bits into even groups based on either the number per group, or the number of groups. ONLY ONE OF EITHER 'number_per_group' OR 'number_of_groups' MAY BE ENTERED. Will discard any extra at the end by default.
 
     :param bits: The bits to be split
-    :param number_per_group: The number of bits in each group
-    :param number_of_groups: The number of groups to split the bits into
+    :param per_group: The number of bits in each group
+    :param num_groups: The number of groups to split the bits into
     :return groups: The split groups of bits
     """
 
-    #TODO implement keep_extra
-
-    if (number_of_groups==-1 ^ number_per_group==-1):
+    if not (num_groups == -1 ^ per_group == -1):
         raise("Must only enter either number_per_group or number_of_groups, not neither, not both.")
     
-    if number_of_groups != -1:
-        groups = []
-        per_group = len(bits)//number_of_groups
-        for group_num in range(number_of_groups):
-            groups.append(bits[(group_num*per_group):((group_num+1)*per_group)])
-        return groups
+    groups = []
+    if num_groups != -1:
+        per_group = len(bits)//num_groups       
     else:
-        groups = []
-        number_of_groups = len(bits)//number_per_group
-        for group_num in range(number_of_groups):
-            groups.append(bits[(group_num*number_per_group):((group_num+1)*number_per_group)])
-        return groups
+        num_groups = len(bits)//per_group
+
+    for group_num in range(num_groups):
+        groups.append(bits[(group_num*per_group):((group_num+1)*per_group)])
+
+    if keep_extra:
+        num_extra = len(bits) % per_group
+        groups.append(bits[-num_extra:])
+
+    return groups
 
 def expand(r: str) -> str:
     """
@@ -99,7 +99,7 @@ def f_function(r: str, key: str):
     r = pad_to(bin(int(r, 2) ^ int(key, 2))[2:], 48)
 
     #split into 8 chunks of 6 bits
-    r_split = split_by_num_groups(r, 6)
+    r_split = split_bits(r, per_group=6)
     
     # sbox sub on each
     r = ""
@@ -132,8 +132,8 @@ def do_round(L: str, R: str, key: str):
 
 def DES_encrypt(plaintext: str, key: str) -> str:
     ciphertext = ""
-    # TODO break into 64 bit chunks and pad
-    chunks = split_by_num_in_group(plaintext, 64)
+    # break into 64 bit chunks and pad
+    chunks = split_bits(plaintext, per_group=64)
     chunks[-1] = pad_to(chunks[-1], 64)
 
     # encrypt each chunk
