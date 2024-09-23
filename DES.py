@@ -1,5 +1,9 @@
 from DES_tables import *
 
+def log(s: str):
+    with open("log.log", "a") as file:
+        file.write(f"{s}\n")
+
 def split_bits(bits: str, per_group: int = -1, num_groups: int = -1, keep_extra: bool = False) -> list:
     """
     Splits the input bits into even groups based on either the number per group, or the number of groups. ONLY ONE OF EITHER 'number_per_group' OR 'number_of_groups' MAY BE ENTERED. Will discard any extra at the end by default.
@@ -10,37 +14,50 @@ def split_bits(bits: str, per_group: int = -1, num_groups: int = -1, keep_extra:
     :return groups: The split groups of bits
     """
 
-    if not (num_groups == -1 ^ per_group == -1):
-        raise("Must only enter either number_per_group or number_of_groups, not neither, not both.")
+    if not ((num_groups == -1) ^ (per_group == -1)):
+        raise ValueError("Must only enter either number_per_group or number_of_groups, not neither or both.")
     
     groups = []
     if num_groups != -1:
-        per_group = len(bits)//num_groups       
+        per_group = len(bits)//num_groups
+        if LOGGING:
+            log(f"{per_group=}")
     else:
         num_groups = len(bits)//per_group
+        if LOGGING:
+            log(f"{num_groups=}")
 
     for group_num in range(num_groups):
         groups.append(bits[(group_num*per_group):((group_num+1)*per_group)])
+        if LOGGING:
+            log(f"Added group {(bits[(group_num*per_group):((group_num+1)*per_group)])}")
 
-    if keep_extra:
+    if keep_extra and num_groups*per_group != len(bits):
         num_extra = len(bits) % per_group
         groups.append(bits[-num_extra:])
 
+    if LOGGING:
+        log(f"{groups=}")
     return groups
 
-def expand(r: str) -> str:
+def expand(bits: str) -> str:
     """
     Does the expansion. Expects 36 bits in and will return 48 bits.
 
-    :param r: The bits to expand
+    :param bits: The bits to expand
     :return r_exp: The expanded bits
     """
-    if len(r) != 36:
-        raise(f"Input bits are wrong length. Expected 36, got {len(r)}")
-    r_exp = ""
+    if len(bits) != 32:
+        raise(ValueError(f"Input bits are wrong length. Expected 32, got {len(bits)}"))
+    
+    bits_exp = ""
     for i in range(len(E)):
-        r_exp += r[i]
-    return r_exp
+        bits_exp += bits[E[i]-1]
+    
+    if LOGGING:
+        log(f"{bits=} expanded to {bits_exp=}")
+
+    return bits_exp
 
 def pad_to(bin: str, length: int) -> str:
     """
@@ -52,8 +69,11 @@ def pad_to(bin: str, length: int) -> str:
     """
 
     if len(bin) < length:
-        return "0" * (4-len(bin)) + bin
-    return bin      
+        if LOGGING:
+            log(f"{bin=} padded to {("0" * (length-len(bin)) + bin)}")
+        return "0" * (length-len(bin)) + bin
+    else:
+        return bin      
 
 def do_S(bits: str, sbox_num: int):
     """
@@ -67,6 +87,8 @@ def do_S(bits: str, sbox_num: int):
     row = int(f"{bits[0]}{bits[-1]}", 2)
     col = int(bits[1:-1], 2)
     out = SBOX[sbox_num][row][col]
+    if LOGGING:
+        log(f"S_{sbox_num+1}[{row}][{col}] = {out}")
     out = bin(out)[2:]
     padded_out = pad_to(out, 4)
     return padded_out
@@ -83,6 +105,8 @@ def do_permutation(bits: str, perm_box: tuple):
     out = ""
     for i in range(len(perm_box)):
         out += bits[perm_box[i]-1]
+    if LOGGING:
+        log(f"{bits=} permuted to {out=}")
     return out
 
 def f_function(r: str, key: str):
@@ -99,6 +123,9 @@ def f_function(r: str, key: str):
     # do xor with key
     r = pad_to(bin(int(r, 2) ^ int(key, 2))[2:], 48)
 
+    if LOGGING:
+        log(f"New R = {r}")
+
     #split into 8 chunks of 6 bits
     r_split = split_bits(r, per_group=6)
     
@@ -112,24 +139,24 @@ def f_function(r: str, key: str):
 
     return r
 
-def do_round(L: str, R: str, key: str):
+def do_round(l: str, r: str, key: str):
     """
     Does a round of the encryption
     
-    :param L: The left half of the bits
-    :param R: The right half of the bits
+    :param l: The left half of the bits
+    :param r: The right half of the bits
     :param key: The key for the round
-    :return R, l_mod: The swapped L and R halves of the bits after modifications
+    :return r, l_mod: The swapped L and R halves of the bits after modifications
     """
 
     # do f with R
-    r_mod = f_function(R, key)
+    r_mod = f_function(l, key)
 
     # L xor f
-    l_mod = bin(int(L) ^ int(r_mod))[2:]
+    l_mod = pad_to(bin(int(r, 2) ^ int(r_mod, 2))[2:], 32)
 
     # swap L and R and return
-    return (R, l_mod)
+    return (r, l_mod)
 
 def shift_by(bits: str, num: int):
     """
@@ -139,6 +166,9 @@ def shift_by(bits: str, num: int):
     :param num: The number to shift to the left by
     :return: The shifted bits
     """
+
+    if LOGGING:
+        log(f"Shifted {bits} to {bits[num:] + bits[:num]}")
     return bits[num:] + bits[:num]
 
 def compute_keys(key: str) -> list:
@@ -160,6 +190,8 @@ def compute_keys(key: str) -> list:
         
         # do permutation and add to keys
         keys.append(do_permutation(f"{C}{D}", PC2))
+        if LOGGING:
+            log(f"Key {i+1} computed as {keys[-1]}")
     return keys
 
 def DES_encrypt(plaintext: str, key: str) -> str:
@@ -174,17 +206,18 @@ def DES_encrypt(plaintext: str, key: str) -> str:
         chunk_mod = do_permutation(chunk, IP)
 
         # compute keys for each round
+        key = pad_to(key, 64)
         keys = compute_keys(key)
 
         # split into L and R
-        L = IP[:32], R = IP[32:]
+        L, R = chunk_mod[:32], chunk_mod[32:]
 
         # do 16 rounds
         for round in range(16):
             L, R = do_round(L, R, keys[round])
 
         # final permutation
-        chunk_mod = do_permutation(chunk_mod, IP_inv)
+        chunk_mod = do_permutation(f"{L}{R}", IP_inv)
 
         ciphertext += chunk_mod
     return ciphertext
@@ -192,3 +225,9 @@ def DES_encrypt(plaintext: str, key: str) -> str:
 def DES_decrypt(ciphertext, keystream):
     plaintext = ""
     return plaintext
+
+LOGGING = True
+to_encrypt = "0111010001101000011010010111001100100000011010010111001100100000011000010010000001110100011001010111001101110100" # "this is a test"
+key_to_use = "01110100011010000110010100100000011010110110010101111001" # "the key"
+print(DES_encrypt(to_encrypt, key_to_use))
+# should output 01000111011000010001011110000001011100101010100111111100011111111110101011101111011001000001001110100010001011010101011111100011
