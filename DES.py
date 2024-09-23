@@ -35,7 +35,8 @@ def expand(r: str) -> str:
     :param r: The bits to expand
     :return r_exp: The expanded bits
     """
-
+    if len(r) != 36:
+        raise(f"Input bits are wrong length. Expected 36, got {len(r)}")
     r_exp = ""
     for i in range(len(E)):
         r_exp += r[i]
@@ -70,7 +71,7 @@ def do_S(bits: str, sbox_num: int):
     padded_out = pad_to(out, 4)
     return padded_out
 
-def do_Permutation(bits: str, perm_box: tuple):
+def do_permutation(bits: str, perm_box: tuple):
     """
     Does a permutation with the input bits
 
@@ -107,7 +108,7 @@ def f_function(r: str, key: str):
         r += do_S(r_split[box_num], box_num)
         
     # do permutation
-    r = do_Permutation(r, f_Perm)
+    r = do_permutation(r, f_Perm)
 
     return r
 
@@ -130,6 +131,37 @@ def do_round(L: str, R: str, key: str):
     # swap L and R and return
     return (R, l_mod)
 
+def shift_by(bits: str, num: int):
+    """
+    Shifts bits to the left by the number provided
+
+    :param bits: The bits to shift
+    :param num: The number to shift to the left by
+    :return: The shifted bits
+    """
+    return bits[num:] + bits[:num]
+
+def compute_keys(key: str) -> list:
+    """
+    Computes the keys for each round of DES
+
+    :param key: The initial key
+    :return keys: The list of keys for each round of DES
+    """
+    keys = []
+    init_key_mod = do_permutation(key, PC1)
+    C, D = init_key_mod[:28], init_key_mod[28:]
+    for i in range(16):
+        # do shift
+        to_shift = 2
+        if i in (0, 1, 8, 15):
+            to_shift = 1
+        C, D = shift_by(C, to_shift), shift_by(D, to_shift)
+        
+        # do permutation and add to keys
+        keys.append(do_permutation(f"{C}{D}", PC2))
+    return keys
+
 def DES_encrypt(plaintext: str, key: str) -> str:
     ciphertext = ""
     # break into 64 bit chunks and pad
@@ -139,10 +171,10 @@ def DES_encrypt(plaintext: str, key: str) -> str:
     # encrypt each chunk
     for chunk in chunks:
         # do init permutation
-        chunk_mod = do_Permutation(chunk, IP)
+        chunk_mod = do_permutation(chunk, IP)
 
-        # TODO get keys for each round
-        keys = []
+        # compute keys for each round
+        keys = compute_keys(key)
 
         # split into L and R
         L = IP[:32], R = IP[32:]
@@ -152,7 +184,7 @@ def DES_encrypt(plaintext: str, key: str) -> str:
             L, R = do_round(L, R, keys[round])
 
         # final permutation
-        chunk_mod = do_Permutation(chunk_mod, IP_inv)
+        chunk_mod = do_permutation(chunk_mod, IP_inv)
 
         ciphertext += chunk_mod
     return ciphertext
