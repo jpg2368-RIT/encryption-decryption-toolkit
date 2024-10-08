@@ -10,6 +10,9 @@ def hw1():
     pass
 
 def hw2():
+    # for k in [11, 12, 13]:
+    #     print(f"5^-1 in mod {k} = {find_mod_inverse(5, k)}")
+    
     #Q2
     # for i in [[3,2, ], [7,2], [3, 10], [7, 100]]:
     #     j, k = i[0], i[1]
@@ -95,19 +98,62 @@ def hw2():
     pass
 
 def hw3():
+    #print(do_round("0"*32, "0"*32, "0"*64))
     pass
+
+def wkst_temp():
+    print(f"5^65 mod 7 = {(5**65)%7}")
+    print(f"phi of 140, 141, 142 = {euler_totient(140)}, {euler_totient(141)}, {euler_totient(142)}")
+    for n in range(16):
+        b = pad_to(bin(n)[2:], 4)
+        try:
+            init = []
+            for i in b:
+                init.append(int(i))
+            l = LFSR(initstate=init, fpoly=[4, 3, 1])
+            l.runFullPeriod()
+            l.info()
+            print("-"*50)
+        except:
+            continue
+
+def exam1():
+    # print(find_mod_inverse(7,14))
+    # print(find_mod_inverse(9,14))
+    
+    # print(do_permutation("01001001010000111110100101000111", f_Perm))
+    
+    # x1 = "000000"
+    # x2 = "101010"
+    # print(pad_to(bin(int(do_S(x1, 5),2) ^ int(do_S(x2,5),2))[2:],4)) #idk
+    # print(pad_to(do_S(bin(int(x1,2) ^ int(x2,2))[2:], 5),4)) #idk
+    
+    #print(euler_totient(224, True))
+    
+    # print(affine_decrypt("QVYJPUIL", 9, 11))
+    # print(find_mod_inverse(9, 26))
+
+    # l = LFSR(initstate=[1,0,0,0,0], fpoly=[5, 4])
+    # l.info()
+    # l.runFullPeriod()
+    # l.info()
+    # l.Viz()
+    # print(f"s6={l.seq[6]}, s9={l.seq[9]}, s12={l.seq[12]}")
+
+    # print(f"Keyspace = {euler_totient(200) * 200}")
+
+    print(f"gcd(1072,224) = {gcd_show(1072,224)}")
+
+
 
 def main():
     # hw1()
     # hw2()
-    hw3()
+    # hw3()
+    #wkst_temp()
+    exam1()
 
 
-    # for k in [5, 12, 13]:
-    #     print(f"5^-1 in mod {k} = {find_mod_inverse(5, k)}")
-
-
-   
 
 if __name__ == "__main__":
     main()

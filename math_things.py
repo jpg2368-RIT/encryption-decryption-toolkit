@@ -26,7 +26,7 @@ def find_mod_inverse(n:int , k: int = 26) -> int:
     for n_inv in range(k):
         if (n * n_inv) % k == 1:
             return n_inv
-    return -1
+    return None
 
 def gcd(a: int, b: int, log: bool = False) -> int:
     """
@@ -150,3 +150,79 @@ def euler_totient_temp(n: int, log: bool = False) -> int:
     for i in prime_factors:
         res *= (1-(1/i))
     return int(res)
+
+def ext_euclid_algo(a: int, b: int) -> tuple:
+    """
+    Does the extended euclidian algorithim
+
+    q = quotient, r = remainder, x = inv(a) mod b, y = inv(b) mod a
+
+    :param a: The first number
+    :param b: The second number
+    :return (lines, ext_lines): A tuple with the table data of each of the parts of the algorithim
+    """
+
+    # do normal euclid algo
+    a = max(a, b)
+    b = min(a, b)
+    lines = []
+    q = -1
+    r = -1
+    while r != 0:
+        q = a//b
+        r = a%b
+        lines.append((a, b, q, r))
+        a = b
+        b = r
+    lines.append((a, b, None, None))
+
+    # do extended part
+    ext_lines = []
+    if a == 1: # dont do ext part if a != 1 because there is no mod inverse
+        x, y, xp, yp = 1 , 1, 1, 1
+        # do it upside down and then flip at end
+        xp = a
+        yp = b
+        for l in range(len(lines)-1):
+            x = yp
+            q2 = lines[len(lines)-(l+2)][2] # get q from corresponding line
+            y = xp - yp * q2
+            ext_lines.append((x, y, xp, yp))
+            xp = x
+            yp = y
+        ext_lines.reverse()
+    return lines, ext_lines
+
+def display_table(headings, table_contents, sep_length: int) -> None:
+    """
+    Displays a table of data
+
+    :param headings: A list or tuple of each of the headings titles
+    :param table_contents: A 2D list or tuple of the table contents
+    :param sep_length: The amount of "-" to use to seperate the headings from the data
+    """
+    for i in headings:
+        print(f"{i}\t", end="")
+    print("")
+    print("-"*sep_length)
+    for line in table_contents:
+        for n in line:
+            print(f"{n}\t", end="")
+        print("")
+
+def mod_inv(a: int, b: int) -> int:
+    """
+    Calculates the modular/multiplicative inverse of a in mod b
+
+    :param a: a in "a mod b"
+    :param b: b in "a mod b"
+    :return a_inv: The inverse of a in mod b
+    """
+    _, table = ext_euclid_algo(a, b)
+    return #TODO finish this
+
+# gcd_show(29, 17)
+# e, e2 = ext_euclid_algo(29, 17)
+# display_table(tuple("a b q r".split()), e, 30)
+# print("")
+# display_table(tuple("x y x\' y\'".split()), e2, 30)
