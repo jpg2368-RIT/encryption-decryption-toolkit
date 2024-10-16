@@ -144,14 +144,28 @@ def exam1():
 
     print(f"gcd(1072,224) = {gcd_show(1072,224)}")
 
+def hw4():
+    #Q1
+    # for n in (1033, 1034, 1035, 1036):
+    #     print(f"25 mod {n} = {mod_inv(25, n)}")
+    #     display_table(ext_euclid_algo(25, n)[0], list("abqr"), format="latex")
+    #     display_table(ext_euclid_algo(25, n)[1], ["x", "y", "xp", "yp"], format="latex")
+    #     print("")
 
+    # Q2
+    # print(f"EEA(7111111, 123456) = {mod_inv(7111111, 123456, True)}") # comupte
+    # print(find_mod_inverse(7111111, 123456)) # check with brute force
+
+    pass
+    
 
 def main():
     # hw1()
     # hw2()
     # hw3()
     #wkst_temp()
-    exam1()
+    # exam1()
+    hw4()
 
 
 

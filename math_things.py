@@ -1,4 +1,5 @@
 import numpy as np
+from tabulate import tabulate
 import math
 
 def is_prime(n: int) -> bool:
@@ -44,9 +45,9 @@ def gcd(a: int, b: int, log: bool = False) -> int:
     else:
         return gcd(b, a % b, log)
     
-def gcd_show(a: int, b: int):
+def eudlid_algo_show(a: int, b: int):
     """
-    Computes the GCD of two numbers and prints the steps as if solving by hand
+    Computes the GCD of two numbers using the Euclidean algorithm and prints the steps as if solving by hand
 
     :param a: Number 1
     :param b: Number 2
@@ -94,6 +95,19 @@ def euler_totient_quick(n: int):
     if n > 1:
         result -= result // n
     return result
+
+def get_prime_factors(n):
+    """
+    Gets the prime factors of a positive integer
+
+    :param n: The int to get the prime factors of
+    :return prime_factors: A set of the prime factors
+    """
+    prime_factors = []
+    for i in range(2, n):
+        if is_prime(i) and n % i == 0:
+            prime_factors.append(i)
+    return prime_factors
 
 def euler_totient(n: int, log: bool = False) -> int:
     """
@@ -163,8 +177,7 @@ def ext_euclid_algo(a: int, b: int) -> tuple:
     """
 
     # do normal euclid algo
-    a = max(a, b)
-    b = min(a, b)
+    a, b = max(a, b), min(a, b)
     lines = []
     q = -1
     r = -1
@@ -181,8 +194,8 @@ def ext_euclid_algo(a: int, b: int) -> tuple:
     if a == 1: # dont do ext part if a != 1 because there is no mod inverse
         x, y, xp, yp = 1 , 1, 1, 1
         # do it upside down and then flip at end
-        xp = a
-        yp = b
+        xp = a # should be 1
+        yp = b # should be 0
         for l in range(len(lines)-1):
             x = yp
             q2 = lines[len(lines)-(l+2)][2] # get q from corresponding line
@@ -193,24 +206,28 @@ def ext_euclid_algo(a: int, b: int) -> tuple:
         ext_lines.reverse()
     return lines, ext_lines
 
-def display_table(headings, table_contents, sep_length: int) -> None:
+def display_table(table_contents, headings, format:str = "fancy_grid", latex_out: bool = False) -> None:
     """
-    Displays a table of data
+    Displays a table of data using tabulate
 
-    :param headings: A list or tuple of each of the headings titles
     :param table_contents: A 2D list or tuple of the table contents
-    :param sep_length: The amount of "-" to use to seperate the headings from the data
+    :param headings: A list or tuple of each of the headings titles
+    :param format: The tabular format to use, fancy_grid by default
+    :param latex_out: If the LaTeX table should also be printed, false by default
     """
-    for i in headings:
-        print(f"{i}\t", end="")
-    print("")
-    print("-"*sep_length)
-    for line in table_contents:
-        for n in line:
-            print(f"{n}\t", end="")
-        print("")
+    # for i in headings:
+    #     print(f"{i}\t", end="")
+    # print("")
+    # print("-"*sep_length)
+    # for line in table_contents:
+    #     for n in line:
+    #         print(f"{n}\t", end="")
+    #     print("")
+    print(tabulate(table_contents, headers=headings, tablefmt=format))
+    if latex_out:
+        print(tabulate(table_contents, headers=headings, tablefmt="latex"))
 
-def mod_inv(a: int, b: int) -> int:
+def mod_inv(a: int, b: int, show: bool = False) -> int:
     """
     Calculates the modular/multiplicative inverse of a in mod b
 
@@ -218,8 +235,26 @@ def mod_inv(a: int, b: int) -> int:
     :param b: b in "a mod b"
     :return a_inv: The inverse of a in mod b
     """
-    _, table = ext_euclid_algo(a, b)
-    return #TODO finish this
+    t, table = ext_euclid_algo(a, b)
+    if show:
+        display_table(t, ["a", "b", "q", "r"])
+        display_table(table, ["x", "y", "xp", "yp"])
+    if table == []:
+        return None
+    return table[0][1] if table[0][1]>0 else table[0][0]
+
+#TODO finish this
+def prime_elements(z: int) -> list:
+    """
+    Finds all primitive elements in a ring
+    
+    :param z: The ring (ints up to z) to check
+    :return prims: A list of the primitive elements
+    """
+    prims = []
+    for n in range(z):
+        pass
+
 
 # gcd_show(29, 17)
 # e, e2 = ext_euclid_algo(29, 17)

@@ -194,6 +194,7 @@ def compute_keys(key: str) -> list:
             log(f"Key {i+1} computed as {keys[-1]}")
     return keys
 
+#TODO Fix DES_encrypt
 def DES_encrypt(plaintext: str, key: str) -> str:
     ciphertext = ""
     # break into 64 bit chunks and pad
@@ -222,11 +223,12 @@ def DES_encrypt(plaintext: str, key: str) -> str:
         ciphertext += chunk_mod
     return ciphertext
 
+#TODO DES_decrypt
 def DES_decrypt(ciphertext, keystream):
     plaintext = ""
     return plaintext
 
-LOGGING = True
+LOGGING = False
 # to_encrypt = "0111010001101000011010010111001100100000011010010111001100100000011000010010000001110100011001010111001101110100" # "this is a test"
 # key_to_use = "01110100011010000110010100100000011010110110010101111001" # "the key"
 # print(DES_encrypt(to_encrypt, key_to_use))
