@@ -142,7 +142,8 @@ def exam1():
 
     # print(f"Keyspace = {euler_totient(200) * 200}")
 
-    print(f"gcd(1072,224) = {gcd_show(1072,224)}")
+    # print(f"gcd(1072,224) = {gcd_show(1072,224)}")
+    pass
 
 def hw4():
     #Q1
@@ -169,10 +170,27 @@ def hw4():
     # print(prim_elements_in(113)[-2:])
 
     # Q5
+    # x = sp.symbols("x")
+    # field = sp.GF(2)
+    # p1 = sp.Poly(x**3 + x + 1, x, domain=field)
+    # p2 = sp.Poly(x**3 + x**2 + 1, x, domain=field)
+    # modp = sp.Poly(x**4 + x + 1, x, domain=field)
+    # print(((p1*p2)%modp).as_expr())
 
     # Q6
+    irr_polys = []
+    x = sp.symbols("x")
+    for a3 in [0, 1]:
+        for a2 in [0, 1]:
+            for a1 in [0, 1]:
+                for a0 in [0, 1]:
+                    poly = sp.Poly(x**4 + a3*x**3 + a2*x**2 + a1*x + a0, x, domain=sp.GF(2))
+                    if len(sp.factor_list(poly)[1]) ==  1:
+                        irr_polys.append(str(poly.as_expr()).replace("**", "^"))
 
-    # russian peasant algo? something with inv mix col
+    print("All irreducible polynomials of degree 4:")
+    for p in irr_polys:
+        print(f"\t{p}")
     pass
     
 

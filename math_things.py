@@ -244,16 +244,19 @@ def mod_inv(a: int, b: int, show: bool = False) -> int:
         return None
     return table[0][1] if table[0][1]>0 else table[0][0]
 
-def roots_test(p, n: int) -> list:
+def roots_test(p: sp.Poly, n: int) -> list:
     """
     Does the roots test and prints the table for a number in Z_n
 
-    :param p: The polynomial to find the roots of
+    :param p: The polynomial to find the roots of with the ring already embedded
     :param n: The ring to be in (Z_n)
     """
+    ring = sp.GF(n)
+    table = []
     # test inputs
     for i in range(n):
-        continue
+        table.append((i, p.eval(i)))
+    print(table)
     
     # check for any 0s -> no 0s = inconclusive, a 0 = is a root
     # for no 0s, check all polynomials up to m//2 (m = degree of initial polyomial)
