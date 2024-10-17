@@ -149,13 +149,30 @@ def hw4():
     # for n in (1033, 1034, 1035, 1036):
     #     print(f"25 mod {n} = {mod_inv(25, n)}")
     #     display_table(ext_euclid_algo(25, n)[0], list("abqr"), format="latex")
-    #     display_table(ext_euclid_algo(25, n)[1], ["x", "y", "xp", "yp"], format="latex")
+    #     display_table(ext_euclid_algo(25, n)[1], ["x", "y", "x\'", "y\'"], format="latex")
     #     print("")
 
     # Q2
     # print(f"EEA(7111111, 123456) = {mod_inv(7111111, 123456, True)}") # comupte
     # print(find_mod_inverse(7111111, 123456)) # check with brute force
 
+    #Q3
+    # for n in (31, 32, 33):
+    #     orders = []
+    #     for a in range(n):
+    #         orders.append((a, order(a, n)))
+    #     print(tabulate(orders, headers=["a", f"order(a mod {n})"], tablefmt="latex"))
+    #     print(f"{'-'*40}\n")
+
+    # Q4
+    # print(prim_elements_in(109)[:2])
+    # print(prim_elements_in(113)[-2:])
+
+    # Q5
+
+    # Q6
+
+    # russian peasant algo? something with inv mix col
     pass
     
 

@@ -1,6 +1,7 @@
 import numpy as np
 from tabulate import tabulate
 import math
+import sympy as sp
 
 def is_prime(n: int) -> bool:
     """
@@ -238,13 +239,53 @@ def mod_inv(a: int, b: int, show: bool = False) -> int:
     t, table = ext_euclid_algo(a, b)
     if show:
         display_table(t, ["a", "b", "q", "r"])
-        display_table(table, ["x", "y", "xp", "yp"])
+        display_table(table, ["x", "y", "x\'", "y\'"])
     if table == []:
         return None
     return table[0][1] if table[0][1]>0 else table[0][0]
 
-#TODO finish this
-def prime_elements(z: int) -> list:
+def roots_test(p, n: int) -> list:
+    """
+    Does the roots test and prints the table for a number in Z_n
+
+    :param p: The polynomial to find the roots of
+    :param n: The ring to be in (Z_n)
+    """
+    # test inputs
+    for i in range(n):
+        continue
+    
+    # check for any 0s -> no 0s = inconclusive, a 0 = is a root
+    # for no 0s, check all polynomials up to m//2 (m = degree of initial polyomial)
+    #TODO roots_test()
+
+def order(a: int, b: int, log: bool = False) -> int:
+    """
+    Finds the order of a mod b
+
+    :param a: a in a mod b
+    :param b: b in a mod b
+    :return order: The order of a mod b
+    """
+    if log:
+        heads = ["k", "a^k", "a^k mod b"]
+        table = []
+    if gcd(a, b) != 1:
+        if log:
+            print(f"gcd({a}, {b}) != 1 => order DNE")
+        return -1
+    else:
+        for k in range(1, 2**64):
+            if log:
+                table.append((k, a**k, a**k%b))
+            if (a**k) % b == 1:
+                if log:
+                    print(f"Table for {a} mod {b}:")
+                    print(tabulate(table, headers=heads, tablefmt="fancy_grid"))
+                return k
+    return -1
+
+def prim_elements_in(z: int) -> list:
     """
     Finds all primitive elements in a ring
     
@@ -253,8 +294,12 @@ def prime_elements(z: int) -> list:
     """
     prims = []
     for n in range(z):
-        pass
-
+        try:
+            if sp.is_primitive_root(n, z):
+                prims.append(n)
+        except:
+            continue
+    return prims
 
 # gcd_show(29, 17)
 # e, e2 = ext_euclid_algo(29, 17)
