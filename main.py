@@ -194,7 +194,8 @@ def hw4():
     pass
     
 def hw5():
-    pass
+    # Q3
+    mod_inv()
 
 
 def main():
