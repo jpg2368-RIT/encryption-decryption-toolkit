@@ -195,7 +195,10 @@ def hw4():
     
 def hw5():
     # Q3
-    mod_inv()
+    field = sp.GF(2**8)
+    x = sp.symbols('x')
+    poly = sp.Poly(x**8 + x**4 + x**3 + x + 1, x, domain=field)
+    sp.inverse(poly, )
 
 
 def main():

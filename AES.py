@@ -68,13 +68,13 @@ def AES_128_encrypt(plaintext: str):
     keys = compute_keys()
 
     for block in blocks:
-        bits = block
+        bytes = block
         # do key addition
-        bits = key_addition(bits, keys[0])
+        bytes = key_addition(bytes, keys[0])
 
         # do rounds
         for round in range(10):
-            bits = shift_rows()
-            bits = mix_column() if round != 9 else None
-            bits = key_addition(bits, keys[round+1])
-        ciphertext += bits
+            bytes = shift_rows()
+            bytes = mix_column() if round != 9 else None
+            bytes = key_addition(bytes, keys[round+1])
+        ciphertext += bytes

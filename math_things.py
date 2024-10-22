@@ -334,6 +334,23 @@ def russian_peasant_algo(a: int, b: int, format = "outline", testing = False):
     display_table(table, ["a", "b"], format=format) if not testing else None
     return tot
 
+def hex_to_poly(hex:int) -> np.poly1d:
+    """
+    Converts a hex (or really any int) to a np.poly1d
+
+    :param hex: The input hex number
+    :return poly: The resulting np.poly1d
+    """
+    return np.poly1d(list(f"{hex:b}"))
+
+def eea_for_poly(a: np.poly1d, b: np.poly1d, f: int):
+    table = []
+
+#def poly_mult(p1:np.poly1d, p2:np.poly1d, modp:np.poly1d):
+def poly_mult(p1:int, p2:int, modp:int):
+    p1 = hex_to_poly(p1)
+    p2 = hex_to_poly(p2)
+    modp = hex_to_poly(modp)
 
 # gcd_show(29, 17)
 # e, e2 = ext_euclid_algo(29, 17)
