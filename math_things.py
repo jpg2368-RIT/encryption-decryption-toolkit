@@ -2,6 +2,7 @@ import numpy as np
 from tabulate import tabulate
 import math
 import sympy as sp
+from DES import pad_to
 
 def is_prime(n: int) -> bool:
     """
@@ -303,6 +304,36 @@ def prim_elements_in(z: int) -> list:
         except:
             continue
     return prims
+
+def last_n_digits(num: int, digits: int):
+    """
+    Returns the last n digits of a number mathemetically
+    
+    :param num: The number
+    :param digits: How many last digits to get
+    """
+    return pad_to(str(num%(10**digits)), digits)
+
+def russian_peasant_algo(a: int, b: int, format = "outline", testing = False):
+    # a, b = min(a, b), max(a, b)
+    table = [[a, b]]
+    while b != 0:
+        a*=2
+        b//=2
+        table.append([a, b])
+    display_table(table, ["a", "b"], format=format) if not testing else None
+    tot = 0
+    to_remove = []
+    for line in table:
+        if line[1]%2==1:
+            tot+=line[0]
+        else:
+            to_remove.append(line)
+    for line in to_remove:
+        table.remove(line)
+    display_table(table, ["a", "b"], format=format) if not testing else None
+    return tot
+
 
 # gcd_show(29, 17)
 # e, e2 = ext_euclid_algo(29, 17)

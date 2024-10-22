@@ -193,6 +193,9 @@ def hw4():
         print(f"\t{p}")
     pass
     
+def hw5():
+    pass
+
 
 def main():
     # hw1()
@@ -200,7 +203,8 @@ def main():
     # hw3()
     #wkst_temp()
     # exam1()
-    hw4()
+    # hw4()
+    hw5()
 
 
 
