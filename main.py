@@ -2,6 +2,7 @@ from LFSRs import *
 from text_ciphers import *
 from math_things import *
 from DES import *
+from AES import *
 
 
 def hw1():
@@ -194,11 +195,50 @@ def hw4():
     pass
     
 def hw5():
+    # Q1
+    # field = sp.GF(2)
+    # x = sp.symbols("x")
+    # p1 = sp.Poly(x**4 + x + 1, x, domain=field)
+    # p2 = sp.Poly(x**7 + x**6 + x**3 + x**2, domain=field)
+    # aes_poly = sp.Poly(x**8 + x**4 + x**3 + x + 1, x, domain=field)
+    # p2_inv = sp.invert(p2, aes_poly)
+
+    # print(f"Result in GF(2^8) = {poly_to_expr(sp.rem(p1 * p2_inv, aes_poly))}")
+    
+    # Q2
+    # x = sp.symbols('x')
+    # field = sp.GF(2)
+    # aes_poly = sp.Poly(x**8 + x**4 + x**3 + x + 1, x, domain=field)
+    # p1 = sp.Poly(x**7 + x**6 + x + 1, x, domain=field)  # 1100 0011
+    # p2 = sp.Poly(x**5 + x**4 + x + 1, x, domain=field)  # 0011 0011
+
+    # product = sp.rem(p1 * p2, aes_poly)
+    # print(f"Product in GF(256): {poly_to_expr(product)}")
+    
     # Q3
-    field = sp.GF(2**8)
-    x = sp.symbols('x')
-    poly = sp.Poly(x**8 + x**4 + x**3 + x + 1, x, domain=field)
-    sp.inverse(poly, )
+    poly = hex_to_poly(0x72)
+    ipoly = hex_to_poly(0x11b)
+    res = poly_inv(poly, ipoly, show_table=True)
+    print(f"Inverse of {poly.as_expr()} with P(x) = {ipoly.as_expr()} = {res.as_expr()} = {poly_to_hex(res)}".replace("**", "^"))
+
+
+    # Q4
+    # for n in [0x29, 0xf3]:
+    #     print(f"sbox(0x{n:x}) = 0x{do_s_box(f'{n:x}')}")
+
+    # Q5
+    # print(f"0x1E * 0x37 mod 0x11B = {hex_poly_mult(0x1E, 0x37)}")
+
+    # Q6
+    # col = [[0x87], [0x6E], [0x46], [0xA6]]
+    # mc = mix_column(col)
+    # for n in mc:
+    #     n[0] = hex(n[0])
+    # imc = mix_column(col, inv=True)
+    # for n in imc:
+    #     n[0] = hex(n[0])
+    # print(f"Result of mix_col = {mc}")
+    # print(f"Result of inv_mix_col = {imc}")
 
 
 def main():

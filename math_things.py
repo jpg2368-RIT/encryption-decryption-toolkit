@@ -217,14 +217,6 @@ def display_table(table_contents, headings, format:str = "fancy_grid", latex_out
     :param format: The tabular format to use, fancy_grid by default
     :param latex_out: If the LaTeX table should also be printed, false by default
     """
-    # for i in headings:
-    #     print(f"{i}\t", end="")
-    # print("")
-    # print("-"*sep_length)
-    # for line in table_contents:
-    #     for n in line:
-    #         print(f"{n}\t", end="")
-    #     print("")
     print(tabulate(table_contents, headers=headings, tablefmt=format))
     if latex_out:
         print(tabulate(table_contents, headers=headings, tablefmt="latex"))
@@ -334,24 +326,166 @@ def russian_peasant_algo(a: int, b: int, format = "outline", testing = False):
     display_table(table, ["a", "b"], format=format) if not testing else None
     return tot
 
-def hex_to_poly(hex:int) -> np.poly1d:
+def hex_to_poly1d(hex:int) -> np.poly1d:
     """
     Converts a hex (or really any int) to a np.poly1d
 
     :param hex: The input hex number
     :return poly: The resulting np.poly1d
     """
-    return np.poly1d(list(f"{hex:b}"))
+    b = f"{hex:b}"
+    blist = []
+    for n in b:
+        blist.append(int(n))
+    return np.poly1d(blist)
 
-def eea_for_poly(a: np.poly1d, b: np.poly1d, f: int):
+def hex_to_poly(hex: int) -> sp.Poly:
+    """
+    Converts a hex number to an sp.Poly
+
+    :param hex: The number in hex
+    :return poly: The sp.Poly representation of the hex number
+    """
+    # Convert hex to binary string, remove '0b' prefix, and pad to 8 bits
+    bin_rep = bin(hex)[2:].zfill(8)  
+    # Create polynomial with coefficients corresponding to binary representation
+    poly = sum(int(bit) * sp.symbols('x')**i for i, bit in enumerate(reversed(bin_rep)))
+    return sp.Poly(poly, sp.symbols('x'), domain=sp.GF(2))
+
+def poly_to_hex(poly: sp.Poly) -> str:
+    """
+    Converts an sp.Poly into hex
+
+    :param poly: The sp.Poly
+    :return hex_value: The sp.Poly as a hex
+    """
+    # Get the coefficients in ascending order of powers
+    coeffs = poly.all_coeffs()
+    # Create a binary string based on coefficients
+    binary_str = ''.join(str(int(c)) for c in coeffs)
+    # Convert binary string to an integer and then to hex
+    hex_value = hex(int(binary_str, 2))
+    return hex_value
+
+def eea_for_poly(poly: sp.Poly, irr_poly: sp.Poly = hex_to_poly(0x11b)) -> list:
+    """
+    Does the Extended Euclidian Algorithm for Polynomials and returns the table
+
+    :param poly: The polynomial to do the EEA on
+    :param irr_poly: The irreducible polynomial, the AES irr_poly by default
+    :return table: The table of the calculations
+    """
     table = []
+    num = poly
+    denom = irr_poly
+    s = 0
+    sm1 = 1
+    sm2 = 0
+    t = 1
+    tm1 = 0
+    tm2 = 1
+    r = None
+    q = None
+    table.append([None, None, None, None, 1, 0])
+    while r != 1:
+        q, r = sp.div(num, denom)
+        s = sm2 - q * sm1
+        t = tm2 - q * tm1
+        table.append([num, denom, q, r, s, t])
+        num = denom
+        denom = r
+        sm2 = sm1
+        sm1 = s
+        tm2 = tm1
+        tm1 = t
+    return table
 
-#def poly_mult(p1:np.poly1d, p2:np.poly1d, modp:np.poly1d):
-def poly_mult(p1:int, p2:int, modp:int):
-    p1 = hex_to_poly(p1)
-    p2 = hex_to_poly(p2)
-    modp = hex_to_poly(modp)
+def poly_inv(poly: sp.Poly, irr_poly: sp.Poly = hex_to_poly(0x11b), show_table: bool = False, format: str = "fancy_grid") -> sp.Poly:
+    """
+    Does the multiplicitive inverse of a polynimial using the EEA for polynomials
 
+    :param poly: The polynomial to use
+    :param irr_poly: The irreducible polynomial, the AES irr_poly by default
+    :param show_table: To display the table of computations or not, false by default
+    :param format: The format for the table, fancy_grid by default
+    :return res: The multiplicitave inverse of the polynomial
+    """
+    tab = eea_for_poly(poly, irr_poly)
+    res = tab[-1][5]
+    if show_table:
+        for i, line in enumerate(tab):
+            for j, poly in enumerate(line):
+                try:
+                    tab[i][j] = str(poly.as_expr()).replace("**", "^")
+                except:
+                    continue
+        display_table(tab, ["Dividend (numerator)", "Divisor (denominator)", "Quotient (q)", "Remainder (r)", "s", "t"], format=format)
+    return res
+
+def sq_mod_table(n: int, exp: int, mod: int, format = "fancy_grid") -> int:
+    """
+    Shows the sq+mul table for computing a^b mod n for large numbers
+    
+    Example:
+        5**20 mod 7:\n
+        step    bit     sq      mul\n
+        1       1       1       5\n
+        2       0       4       -\n
+        3       1       2       3\n
+        4       0       2       -\n
+        5       0       4       -\n
+
+    :param n: The base (a in a^b mod n)
+    :param exp: The exponent (b in a^b mod n)
+    :param mod: What to mod by (n in a^b mod n)
+    :param format: The format to print the table with
+    :return result: The result of a^b%n
+    """
+
+    table = []
+    headers = ["Step", "Bit", "SQ", "Mult"]
+    bit, sq, mul = None, None, None
+    for step in range(len(f"{exp:b}")):
+        bit = f"{exp:b}"
+        bit = bit[step]
+        if step == 0:
+            sq = 1
+            mul = n
+        else:
+            sq = mul**2%mod if mul is not None else sq**2%mod
+            mul = None if bit == "0" else sq*n%mod
+        table.append([step+1, bit, sq, mul])
+
+    print(tabulate(table, headers=headers, tablefmt=format))
+    return mul if mul != None else sq
+
+def poly_mult(p1:sp.Poly, p2:sp.Poly, modp:sp.Poly = hex_to_poly(0x11B)):
+    return p1 * p2 % modp
+
+def poly_to_expr(poly: sp.Poly):
+    """
+    Converts an sp.Poly object to a str with ^ instead of **
+
+    :param poly: The polynomial
+    :return: The poly converted to a string
+    """
+    return str(poly.as_expr()).replace("**", "^")
+
+def hex_poly_mult(poly1: int, poly2: int, mod: int = 0x11B) -> int:
+    """
+    Multiplies two hex number representations of polynomials mod another polynomial (the AES polynomial by default)
+
+    :param poly1: The first polynomial
+    :param poly2: The second polynomial
+    :param mod: The polynomial to mod by, the AES poly by default
+    :return hex: The hex representation of poly1 * poly2 % mod 
+    """
+    poly1 = hex_to_poly(poly1)
+    poly2 = hex_to_poly(poly2)
+    mod = hex_to_poly(mod)
+    return int(poly_to_hex(poly1 * poly2 % mod), 16)
+
+# sq_mod_table(5, 20, 7)
 # gcd_show(29, 17)
 # e, e2 = ext_euclid_algo(29, 17)
 # display_table(tuple("a b q r".split()), e, 30)

@@ -1,3 +1,9 @@
+from math_things import *
+from AES_tables import *
+
+x = sp.symbols("x")
+AES_POLY = sp.Poly(x**8 + x**4 + x**3 + x + 1, domain=sp.GF(2**8))
+
 def pad_to(instr: str, length: int) -> str:
     """
     Pads a string to a certain length. Will return the original bits if length >= len(bin)
@@ -14,6 +20,32 @@ def pad_to(instr: str, length: int) -> str:
     else:
         return instr 
 
+def do_s_box(data_byte: str):
+    """
+    Does the S-Box
+
+    :param byte: The byte for the sbox
+    :return mod_byte: The multiplicative inverse of the byte with the AES polynomial
+    """
+    b1 = int(data_byte[0], 16)
+    b2 = int(data_byte[1], 16)
+    return f"{AES_INV_TAB[b1][b2]:x}".zfill(2)
+
+def byte_sub(bytes_full: int) -> str:
+    """
+    Does the byte substitution layer in an AES round
+
+    :param bytes_full: The bytes in a list after their
+    """
+    bytes_full = f"{bytes_full:x}"
+    bytes_full = bytes_full.zfill(64)
+    bytes_split = split_bits(bytes_full, per_group=2)
+    for i, byte in enumerate(bytes_split):
+        bytes_split[i] = do_s_box(byte)
+    out_bytes = "".join(n for n in bytes_split)
+    return out_bytes
+
+
 def compute_keys():
     pass
 
@@ -23,11 +55,30 @@ def do_round(n: int):
 def shift_rows(bytes: bytearray):
     pass
 
-def mix_column():
-    pass
+def mix_column(col: list[int], inv: bool = False):
+    """
+    Does the mix column part of AES
 
-def key_addition(bytes: bytes, key_bytes: bytes) -> bytes:
-    return bytes ^ key_bytes
+    :param col: The column to do it on
+    :param inv: If should do the inverse mix col or not, false by default
+    :return res: The resulting column
+    """
+    res = []
+    for row in MIX_COL_CONST if not inv else INV_MIX_COL_CONST:
+        vals = []
+        for i, num in enumerate(row):
+            vals.append(hex_poly_mult(col[i][0], num))
+        res.append([vals[0] ^ vals[1] ^ vals[2] ^ vals[3]])
+    return res
+
+def key_addition(data_bytes: str, key_bytes: str) -> str:
+    """
+    Does the key addition step (bytes xor key)
+
+    :param bytes: The data bytes
+    :param key_bytes: The key bytes
+    """
+    return str(int(data_bytes, 16) ^ int(key_bytes, 16)).zfill(64)
 
 def split_bits(bits: str, per_group: int = -1, num_groups: int = -1, keep_extra: bool = False) -> list:
     """
@@ -62,19 +113,20 @@ def AES_128_encrypt(plaintext: str):
     
     # split into 128 bit blocks
     blocks = split_bits(plaintext, per_group=128, keep_extra=True)
-    blocks[-1] = pad_to(blocks[-1], 128)
+    blocks[-1] = str(blocks[-1]).zfill(128)
     
     # compute keys
     keys = compute_keys()
 
     for block in blocks:
-        bytes = block
+        data_bytes = block
         # do key addition
-        bytes = key_addition(bytes, keys[0])
+        data_bytes = key_addition(data_bytes, keys[0])
 
         # do rounds
         for round in range(10):
-            bytes = shift_rows()
-            bytes = mix_column() if round != 9 else None
-            bytes = key_addition(bytes, keys[round+1])
-        ciphertext += bytes
+            data_bytes = byte_sub(data_bytes) # S-box
+            data_bytes = shift_rows()
+            data_bytes = mix_column() if round != 9 else data_bytes
+            data_bytes = key_addition(data_bytes, keys[round+1])
+        ciphertext += data_bytes

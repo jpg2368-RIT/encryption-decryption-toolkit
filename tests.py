@@ -1,4 +1,5 @@
 from math_things import *
+from AES_tables import *
 import random
 
 order_cases = (
@@ -14,6 +15,16 @@ rpalgo_test = []
 for i in range(20):
     a, b = random.randint(1, 2**20), random.randint(1, 2**128)
     rpalgo_test.append(((a, b, None , True), a*b))
+
+
+# hex_poly_mult_test = []
+# for i in range(len(AES_INV_TAB)):
+#     for j in range(len(AES_INV_TAB[i])):
+#         hex_poly_mult_test.append(((i, j), hex(AES_INV_TAB[i][j])))
+
+
+
+
 
 def test(func, test_cases, log = False):
     """
@@ -45,6 +56,7 @@ def main():
     test(order, order_cases)
     testa(order, order_cases)
     test(russian_peasant_algo, rpalgo_test)
+    # test(hex_poly_mult, hex_poly_mult_test)
 
 if __name__ == "__main__":
     main()
