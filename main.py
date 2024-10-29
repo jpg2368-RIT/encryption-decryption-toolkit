@@ -216,10 +216,10 @@ def hw5():
     # print(f"Product in GF(256): {poly_to_expr(product)}")
     
     # Q3
-    poly = hex_to_poly(0x72)
-    ipoly = hex_to_poly(0x11b)
-    res = poly_inv(poly, ipoly, show_table=True)
-    print(f"Inverse of {poly.as_expr()} with P(x) = {ipoly.as_expr()} = {res.as_expr()} = {poly_to_hex(res)}".replace("**", "^"))
+    # poly = hex_to_poly(0x72)
+    # ipoly = hex_to_poly(0x11b)
+    # res = poly_inv(poly, ipoly, show_table=True)
+    # print(f"Inverse of {poly.as_expr()} with P(x) = {ipoly.as_expr()} = {res.as_expr()} = {poly_to_hex(res)}".replace("**", "^"))
 
 
     # Q4
@@ -240,6 +240,11 @@ def hw5():
     # print(f"Result of mix_col = {mc}")
     # print(f"Result of inv_mix_col = {imc}")
 
+    pass
+
+def exam2():
+    pass
+
 
 def main():
     # hw1()
@@ -248,7 +253,8 @@ def main():
     #wkst_temp()
     # exam1()
     # hw4()
-    hw5()
+    # hw5()
+    exam2()
 
 
 
