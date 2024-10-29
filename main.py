@@ -8,7 +8,6 @@ from AES import *
 def hw1():
     print(find_mod_inverse(7, 26))
     print(affine_decrypt("zuqtqgsytqvrsdqztwvaoyajramjazi", 7, 22))
-    pass
 
 def hw2():
     # for k in [11, 12, 13]:
@@ -192,7 +191,6 @@ def hw4():
     print("All irreducible polynomials of degree 4:")
     for p in irr_polys:
         print(f"\t{p}")
-    pass
     
 def hw5():
     # Q1
@@ -245,6 +243,12 @@ def hw5():
 def exam2():
     pass
 
+def hw6():
+    # Q4
+    # print(f"39^39 mod 773 = {sq_mod_table(39, 39, 773, format="latex")}")
+
+    # Q5
+    print(f"1234567^23456789 mod 3333337 = {sq_mod_table(1234567, 23456789, 3333337, format="latex")}")
 
 def main():
     # hw1()
@@ -255,6 +259,7 @@ def main():
     # hw4()
     # hw5()
     exam2()
+    hw6()
 
 
 

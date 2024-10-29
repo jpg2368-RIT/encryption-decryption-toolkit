@@ -5,22 +5,6 @@ NUM_ROUNDS = 10
 x = sp.symbols("x")
 AES_POLY = sp.Poly(x**8 + x**4 + x**3 + x + 1, domain=sp.GF(2**8))
 
-def pad_to(instr: str, length: int) -> str:
-    """
-    Pads a string to a certain length. Will return the original bits if length >= len(bin)
-
-    :param instr: The input  string
-    :param length: The length to pad to
-    :return padded_str: The padded bits
-    """
-
-    if len(instr) < length:
-        # if LOGGING:
-        #     log(f"{bin=} padded to {("0" * (length-len(bin)) + bin)}")
-        return "0" * (length-len(instr)) + instr
-    else:
-        return instr 
-
 def do_s_box(data_byte: str):
     """
     Does the S-Box

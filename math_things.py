@@ -422,7 +422,7 @@ def poly_inv(poly: sp.Poly, irr_poly: sp.Poly = hex_to_poly(0x11b), show_table: 
         display_table(tab, ["Dividend (numerator)", "Divisor (denominator)", "Quotient (q)", "Remainder (r)", "s", "t"], format=format)
     return res
 
-def sq_mod_table(n: int, exp: int, mod: int, format = "fancy_grid") -> int:
+def sq_mod_table(n: int, exp: int, mod: int, format = "fancy_grid", show_table: bool = False) -> int:
     """
     Shows the sq+mul table for computing a^b mod n for large numbers
     
@@ -456,7 +456,7 @@ def sq_mod_table(n: int, exp: int, mod: int, format = "fancy_grid") -> int:
             mul = None if bit == "0" else sq*n%mod
         table.append([step+1, bit, sq, mul])
 
-    print(tabulate(table, headers=headers, tablefmt=format))
+    print(tabulate(table, headers=headers, tablefmt=format)) if show_table else None
     return mul if mul != None else sq
 
 def poly_mult(p1:sp.Poly, p2:sp.Poly, modp:sp.Poly = hex_to_poly(0x11B)):
@@ -485,9 +485,14 @@ def hex_poly_mult(poly1: int, poly2: int, mod: int = 0x11B) -> int:
     mod = hex_to_poly(mod)
     return int(poly_to_hex(poly1 * poly2 % mod), 16)
 
-# sq_mod_table(5, 20, 7)
-# gcd_show(29, 17)
-# e, e2 = ext_euclid_algo(29, 17)
-# display_table(tuple("a b q r".split()), e, 30)
-# print("")
-# display_table(tuple("x y x\' y\'".split()), e2, 30)
+def main():
+    # sq_mod_table(5, 20, 7)
+    # gcd_show(29, 17)
+    # e, e2 = ext_euclid_algo(29, 17)
+    # display_table(tuple("a b q r".split()), e, 30)
+    # print("")
+    # display_table(tuple("x y x\' y\'".split()), e2, 30)
+    pass
+
+if __name__ == "__main__":
+    main()
