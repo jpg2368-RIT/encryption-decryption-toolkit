@@ -283,10 +283,9 @@ def main():
     # exam1()
     # hw4()
     # hw5()
-    exam2()
+    # exam2()
     # hw6()
-
-    # print(time_exec("1234567**23456789%3333337"))
+    pass
 
 if __name__ == "__main__":
     main()

@@ -7,7 +7,7 @@ def time_exec(e, runs = 1):
     times = []
     for _ in range(runs):
         st = time.time()
-        exec(e)
+        exec(e, globals())
         times.append(time.time() - st)
     return times
 
