@@ -3,6 +3,7 @@ from text_ciphers import *
 from math_things import *
 from DES import *
 from AES import *
+from tests import time_exec
 
 
 def hw1():
@@ -241,14 +242,38 @@ def hw5():
     pass
 
 def exam2():
-    pass
+    # Q2
+    print(hex(hex_poly_mult(0xDD, 0xF9)))
+
+    # Q4
+    print(mod_inv(999, 101, True)) # wrong?
+    print(sp.mod_inverse(999,101))
+
+    # Q5
+    print(order(4, 37))
+
+    # Q10
+    print(f"Num of prim elements in GF(23): {len(prim_elements_in(23))}")
+
+    # Q13
+    inv_col = mix_column([[0xFF], [0x94], [0x9c], [0x6E]], True)
+    for i in range(len(inv_col)):
+        inv_col[i][0] = hex(inv_col[i][0])
+    print(f"{inv_col=}")
+
+    # Q17
+    x = sp.symbols("x")
+    p = sp.Poly(x + 1, x, domain=sp.GF(2))
+    irrp = sp.Poly(x**3 + x + 1, x, domain=sp.GF(2))
+    res = poly_inv(p, irrp, True)
+    print(f"poly_inv = {res.as_expr()}")
 
 def hw6():
     # Q4
     # print(f"39^39 mod 773 = {sq_mod_table(39, 39, 773, format="latex")}")
 
     # Q5
-    print(f"1234567^23456789 mod 3333337 = {sq_mod_table(1234567, 23456789, 3333337, format="latex")}")
+    print(f"1234567^23456789 mod 3333337 = {sq_mod_table(1234567, 23456789, 3333337, format='latex')}")
 
 def main():
     # hw1()
@@ -259,9 +284,9 @@ def main():
     # hw4()
     # hw5()
     exam2()
-    hw6()
+    # hw6()
 
-
+    # print(time_exec("1234567**23456789%3333337"))
 
 if __name__ == "__main__":
     main()

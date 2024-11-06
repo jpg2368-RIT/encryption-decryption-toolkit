@@ -1,6 +1,15 @@
 from math_things import *
 from AES_tables import *
 import random
+import time
+
+def time_exec(e, runs = 1):
+    times = []
+    for _ in range(runs):
+        st = time.time()
+        exec(e)
+        times.append(time.time() - st)
+    return times
 
 order_cases = (
     ((3, 9), -1),
