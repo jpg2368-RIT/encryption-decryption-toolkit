@@ -2,6 +2,14 @@ from math_things import *
 import random
 
 def generate_keys(p, q, e):
+    """
+    Generates the keys for RSA
+
+    :param p: The value for p
+    :param q: The value for q
+    :param e: The value for e
+    :return (n,e), d: The private key
+    """
     # choose 2 large primes, p and q. ex: p=3, q=11
     # compute n = p*q. ex: n = 33
     n = p*q
@@ -11,39 +19,37 @@ def generate_keys(p, q, e):
     # compute private key d where d*e=1 mod phi(n) (use EEA). ex: d=7 mod 20
     d = mod_inv(e, phi_n)
     # return public key (n, e) and private key d
-    return ((n, e), d)
-
-def generate_n_bit_prime(n: int, log_fails: bool = False) -> int:
-    """
-    Generates a prime number with n bits
-
-    :param n: The number of bits for the prime to be
-    :param log_fails: If the function should print out the fails
-    :return prime_num: The generated prime number
-    """
-    prime_num = None
-    while True:
-        nstr = ""
-        for _ in range(n):
-            nstr += str(random.randint(0,1))
-        p_cand = int(nstr, 2)
-        if sp.isprime(p_cand):
-            prime_num = p_cand
-            break
-        print(f"Failed: {p_cand}") if log_fails else None
-    return prime_num
+    return (n, e), d
 
 def RSA_encrypt(plaintext: int, p:int, q:int, e:int):
+    """
+    Does RSA encryption
+
+    :param plaintext: The plaintext as an int
+    :param p: The p value
+    :param q: The q value
+    :param e: The e value
+    :return ciphertext, priv_key: A tuple of the ciphertext and the private key ((n, e), d)
+    """
     # generate keys
     pub_key, priv_key = generate_keys(p, q, e)
 
     # compute y = x^e mod n
-    ciphertext = sq_mod_table(plaintext, e, pub_key[0], show_table=False)
+    ciphertext = sq_mult_table(plaintext, e, pub_key[0], show_table=False)
     return ciphertext, priv_key
 
 def RSA_decrypt(ciphertext, d, n):
+    """
+    Does RSA decryption
+
+    :param ciphertext: The ciphertext as an int
+    :param d: The d value
+    :param n: The n value
+    :return plaintext: The decrypted plaintext
+    """
     # x = y^d mod n
-    plaintext = sq_mod_table(ciphertext, d, n, show_table=False)
+    plaintext = sq_mult_table(ciphertext, d, n, show_table=False)
+
     return plaintext
 
 def main():

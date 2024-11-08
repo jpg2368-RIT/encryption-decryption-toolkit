@@ -3,6 +3,7 @@ from text_ciphers import *
 from math_things import *
 from DES import *
 from AES import *
+from RSA import *
 from tests import time_exec
 
 
@@ -269,11 +270,61 @@ def exam2():
     print(f"poly_inv = {res.as_expr()}")
 
 def hw6():
+    # Q2
+    # for m in [8, 10]:
+    #     print(f"{m}:")
+    #     for a in range(m):
+    #         g = gcd(a,m)
+    #         try:
+    #             mi = sp.mod_inverse(a, m)
+    #         except:
+    #             mi = "\\text{DNE}"
+    #         e = a**euler_totient(m)%m
+    #         # print(f"\t\\item gcd({a}, {m}) = {g}, ${a}^[-1] \\mod {m} = {mi},\\ {a}^[-1] \\equiv {a}^[\\phi({m})] \\equiv {a}^[{euler_totient(m)}] \\equiv {a**euler_totient(m)} \\equiv {e} \mod {m}  \\implies$ Euler Function {"works" if e == 1 else "does not work"}".replace("[", "{").replace("]", "}"))    
+    #         print(f"\t\\item gcd({a}, {m}) = {g},\\ ${a}^[-1] \\equiv {a}^[\\phi({m})] \\equiv {a}^[{euler_totient(m)}] \\equiv {a**euler_totient(m)} \\equiv {e} \\mod {m}  \\implies$ Euler Function {"holds" if e == 1 else "does not hold"}".replace("[", "{").replace("]", "}"))    
+   
+    # Q3
+    print(euler_totient(26))
+
     # Q4
     # print(f"39^39 mod 773 = {sq_mod_table(39, 39, 773, format="latex")}")
 
     # Q5
-    print(f"1234567^23456789 mod 3333337 = {sq_mod_table(1234567, 23456789, 3333337, format='latex')}")
+    # print(f"1234567^23456789 mod 3333337 = {sq_mult_table(1234567, 23456789, 3333337, format='latex')}")
+
+def hw7():
+    # Q1
+    def p1():
+        p = 3
+        q = 11
+        x = 5
+        d = 7
+        n = p*q
+        phi_n = euler_totient(n)
+        e = mod_inv(d, phi_n)
+        ct, _ = RSA_encrypt(x, p, q, e)
+        print(f"\t{ct=}")
+        pt = RSA_decrypt(ct, d, n)
+        print(f"\t{pt=}")
+
+    def p2():
+        p = 3
+        q = 11
+        e = 3
+        x = 9
+
+        ct, pk = RSA_encrypt(x, p, q, e)
+        d = pk
+        n = p*q
+        print(f"\t{ct=}")
+        pt = RSA_decrypt(ct, d, n)
+        print(f"\t{pt=}")
+
+    print("part 1:")
+    p1()
+    print("part 2:")
+    p2()
+    pass
 
 def main():
     # hw1()
@@ -284,8 +335,15 @@ def main():
     # hw4()
     # hw5()
     # exam2()
-    # hw6()
+    hw6()
+    # hw7()
     pass
 
 if __name__ == "__main__":
+    # if input("Interactive mode? (y/n): ").lower() == "y":
+    #     print("Starting interactive mode...\n")
+    #     while True:
+    #         exec(input(">>> "), globals())
+    # else:
+    #     main()
     main()

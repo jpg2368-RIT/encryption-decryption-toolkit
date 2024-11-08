@@ -422,9 +422,9 @@ def poly_inv(poly: sp.Poly, irr_poly: sp.Poly = hex_to_poly(0x11b), show_table: 
         display_table(tab, ["Dividend (numerator)", "Divisor (denominator)", "Quotient (q)", "Remainder (r)", "s", "t"], format=format)
     return res
 
-def sq_mod_table(n: int, exp: int, mod: int, format = "fancy_grid", show_table: bool = False) -> int:
+def sq_mult_table(n: int, exp: int, mod: int, format = "fancy_grid", show_table: bool = False) -> int:
     """
-    Shows the sq+mul table for computing a^b mod n for large numbers
+    Shows the square + multiply table for computing a^b mod n for large numbers
     
     Example:
         5**20 mod 7:\n
@@ -438,7 +438,7 @@ def sq_mod_table(n: int, exp: int, mod: int, format = "fancy_grid", show_table: 
     :param n: The base (a in a^b mod n)
     :param exp: The exponent (b in a^b mod n)
     :param mod: What to mod by (n in a^b mod n)
-    :param format: The format to print the table with
+    :param format: The format to print the table with, fancy_grid by default
     :return result: The result of a^b%n
     """
 
@@ -484,6 +484,26 @@ def hex_poly_mult(poly1: int, poly2: int, mod: int = 0x11B) -> int:
     poly2 = hex_to_poly(poly2)
     mod = hex_to_poly(mod)
     return int(poly_to_hex(poly1 * poly2 % mod), 16)
+
+def generate_n_bit_prime(n: int, log_fails: bool = False) -> int:
+    """
+    Generates a prime number with n bits
+
+    :param n: The number of bits for the prime to be
+    :param log_fails: If the function should print out the fails
+    :return prime_num: The generated prime number
+    """
+    prime_num = None
+    while True:
+        nstr = ""
+        for _ in range(n):
+            nstr += str(random.randint(0,1))
+        p_cand = int(nstr, 2)
+        if sp.isprime(p_cand):
+            prime_num = p_cand
+            break
+        print(f"Failed: {p_cand}") if log_fails else None
+    return prime_num
 
 def main():
     # sq_mod_table(5, 20, 7)
