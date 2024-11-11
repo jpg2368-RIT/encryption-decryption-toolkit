@@ -505,6 +505,54 @@ def generate_n_bit_prime(n: int, log_fails: bool = False) -> int:
         print(f"Failed: {p_cand}") if log_fails else None
     return prime_num
 
+def PI(nums: list | tuple):
+    """
+    Summation but for products
+
+    :param nums: List of numbers to multiply together
+    :return prod: The product
+    """
+    prod = 1
+    for num in nums:
+        prod *= num
+    return prod
+
+def crt(nums: list | tuple, in_mod: list | tuple, logging: bool = False, latex_logging: bool = False):
+    """
+    Does the Chinese Remainder Theorem with numbers.
+    x mod M = a_1*b_1*c_1 + ... + a_n*b_n*c_n from a_1 mod m_1 ... a_n mod m_n, M = sum(m_1...m_n)
+
+    :param nums: a_1...a_n
+    :param in_mod: m_1...m_n
+    :param logging: Will print out the full equation if true, False by default
+    :param latex_logging: Will format the log with LaTeX, False by default
+    :return x, M: A tuple of the number and what mod it is in (x mod M)
+    """
+    if len(nums) != len(in_mod):
+        raise ValueError("Length of nums and in_mod must be the same")
+    if math.gcd(*in_mod) != 1:
+        raise ValueError("Elements of in_mod must be coprime")
+    log1 = []
+    log2 = []
+    times = "*" if not latex_logging else " \\cdot "
+    num_sum = 0
+    M: int = PI(in_mod)
+    for i in range(len(nums)):
+        a = nums[i]
+        c= int(M/in_mod[i])
+        b = sp.mod_inverse(c, in_mod[i])
+        log1.append(f"({a}{times}{b}{times}{c})")
+        log2.append(f"{PI([a,b,c])}")
+        num_sum += a*b*c
+    x = int(num_sum % M)
+    print(*log1, sep=" + ", end=" = ") if logging else None
+    print(*log2, sep=" + ", end=" = ") if logging else None
+    print(f"{num_sum} {'mod' if not latex_logging else '\\bmod'} {M}", end=" = " if not latex_logging else " \\equiv ") if logging else None
+    print(f"{x} {'mod' if not latex_logging else '\\bmod'} {M}") if logging else None
+    return x, M
+
+chinese_remainder_theorem = crt
+
 def main():
     # sq_mod_table(5, 20, 7)
     # gcd_show(29, 17)
@@ -512,6 +560,7 @@ def main():
     # display_table(tuple("a b q r".split()), e, 30)
     # print("")
     # display_table(tuple("x y x\' y\'".split()), e2, 30)
+    # crt([1,2,3], [3,5,7], logging=True)
     pass
 
 if __name__ == "__main__":

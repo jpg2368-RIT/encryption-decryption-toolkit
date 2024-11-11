@@ -17,7 +17,7 @@ def generate_keys(p, q, e):
     phi_n = euler_totient(n)
     # select the public exponent e where e in [1, phi(n)-1] and gcd(e, phi(n)) = 1 (relatively prime). ex: e=3
     # compute private key d where d*e=1 mod phi(n) (use EEA). ex: d=7 mod 20
-    d = mod_inv(e, phi_n)
+    d = sp.mod_inverse(e, phi_n)
     # return public key (n, e) and private key d
     return (n, e), d
 

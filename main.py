@@ -301,14 +301,15 @@ def hw7():
         d = 7
         n = p*q
         phi_n = euler_totient(n)
-        e = mod_inv(d, phi_n)
+        # e = mod_inv(d, phi_n)
+        e = sp.mod_inverse(d, phi_n)
         ct, _ = RSA_encrypt(x, p, q, e)
         print(f"\t{ct=}")
         pt = RSA_decrypt(ct, d, n)
         print(f"\t{pt=}")
 
     def p2():
-        p = 3
+        p = 5
         q = 11
         e = 3
         x = 9
@@ -324,6 +325,12 @@ def hw7():
     p1()
     print("part 2:")
     p2()
+
+    # Q2
+    mods = [13, 17]
+    crt([1,0], mods, True, latex_logging=True)
+    crt([4,5], mods, True, latex_logging=True)
+    crt([5,4], mods, True, latex_logging=True)
     pass
 
 def main():
@@ -335,8 +342,8 @@ def main():
     # hw4()
     # hw5()
     # exam2()
-    hw6()
-    # hw7()
+    # hw6()
+    hw7()
     pass
 
 if __name__ == "__main__":
