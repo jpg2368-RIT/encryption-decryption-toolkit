@@ -6,6 +6,16 @@ from AES import *
 from RSA import *
 from tests import time_exec
 
+def do_q(q_num: int, q_func) -> None:
+    """
+    Does a question
+
+    :param q_num: The question number
+    :param q_func: The function to do for the question
+    """
+    print(f"Quesion {q_num}:")
+    q_func()
+    print("-"*100,"\n")
 
 def hw1():
     print(find_mod_inverse(7, 26))
@@ -294,44 +304,88 @@ def hw6():
 
 def hw7():
     # Q1
-    def p1():
-        p = 3
-        q = 11
-        x = 5
-        d = 7
-        n = p*q
-        phi_n = euler_totient(n)
-        # e = mod_inv(d, phi_n)
-        e = sp.mod_inverse(d, phi_n)
-        ct, _ = RSA_encrypt(x, p, q, e)
-        print(f"\t{ct=}")
-        pt = RSA_decrypt(ct, d, n)
-        print(f"\t{pt=}")
+    def q1():
+        def p1():
+            p = 3
+            q = 11
+            x = 5
+            d = 7
+            n = p*q
+            phi_n = euler_totient(n)
+            # e = mod_inv(d, phi_n)
+            e = sp.mod_inverse(d, phi_n)
+            ct, _ = RSA_encrypt(x, p, q, e)
+            print(f"\t{ct=}")
+            pt = RSA_decrypt(ct, d, n)
+            print(f"\t{pt=}")
 
-    def p2():
-        p = 5
-        q = 11
-        e = 3
-        x = 9
+        def p2():
+            p = 5
+            q = 11
+            e = 3
+            x = 9
 
-        ct, pk = RSA_encrypt(x, p, q, e)
-        d = pk
-        n = p*q
-        print(f"\t{ct=}")
-        pt = RSA_decrypt(ct, d, n)
-        print(f"\t{pt=}")
+            ct, pk = RSA_encrypt(x, p, q, e)
+            d = pk
+            n = p*q
+            print(f"\t{ct=}")
+            pt = RSA_decrypt(ct, d, n)
+            print(f"\t{pt=}")
 
-    print("part 1:")
-    p1()
-    print("part 2:")
-    p2()
+        print("part 1:")
+        p1()
+        print("part 2:")
+        p2()
+    do_q(1, q1)
 
     # Q2
-    mods = [13, 17]
-    crt([1,0], mods, True, latex_logging=True)
-    crt([4,5], mods, True, latex_logging=True)
-    crt([5,4], mods, True, latex_logging=True)
-    pass
+    def q2():
+        mods = [13, 17]
+        crt([1,0], mods, True, latex_logging=True)
+        crt([4,5], mods, True, latex_logging=True)
+        crt([5,4], mods, True, latex_logging=True)
+    do_q(2, q2)
+
+    def q3():
+        # part a
+        exp = 1536
+        print(f"{exp*np.log(2)=}")
+        print(f"{2/(exp * np.log(2))=}")
+        print(f"1/{exp*np.log(2)/2}")
+        print("")
+
+        exp = 2051
+        print(f"{exp*np.log(2)=}")
+        print(f"{2/(exp * np.log(2))=}")
+        print(f"1/{exp*np.log(2)/2}")
+    do_q(3, q3)
+
+    # Q6
+    def q6():
+        n = 114381625757888867669235779976146612010218296721242362562561842935706935245733897830597123563958705058989075147599290026879543541
+        e = 9007
+        y = 24102230047908492921334561683677822772379364497905426326274048627460349574761254064237656827652272780749547791945400229075831407
+        p = 3490529510847650949147849619903898133417764638493387843990820577
+        q = 32769132993266709549961988190834461413177642967992942539798288533
+        phi_n = (p-1) * (q-1)
+        print(f"{phi_n=}")
+        d = sp.mod_inverse(e, phi_n)
+        print(f"{d=}")
+        plaintext = RSA_decrypt(y, d, n)
+        plaintext = str(plaintext)
+        plaintext = ("0" + plaintext) if len(plaintext) % 2 != 0 else plaintext
+        def convert(pt: str):
+            def to_letter(num):
+                A_NUM = ord("A")
+                l = chr(A_NUM-1 + int(num))
+                return l if l != "@" else " "
+            ret = ""
+            for n in split_bits(pt, per_group=2):
+                ret += to_letter(n)
+            return ret
+        plaintext = convert(plaintext)
+        print(f"{plaintext=}")
+    do_q(6, q6)
 
 def main():
     # hw1()
