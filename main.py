@@ -360,6 +360,25 @@ def hw7():
         print(f"1/{exp*np.log(2)/2}")
     do_q(3, q3)
 
+    def q4():
+        for n in [17, 101, 1001]:
+            bits = f"{2**n+1:b}"
+            # print(f"2**n+1 = {bits}")
+            print(f"2**{n} = {len(bits)} bits")
+            print("")
+    do_q(4, q4)
+
+    # Q5
+    def q5():
+        chars = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+        n = 3763
+        e = 11
+        cb = generate_RSA_codebook(chars, (n, e))
+        print(cb)
+        for ct in [2912, 2929, 3368, 153, 3222, 3335, 153, 1222]:
+            print(f"{ct} -> {cb[ct]}")
+    do_q(5, q5)
+
     # Q6
     def q6():
         n = 114381625757888867669235779976146612010218296721242362562561842935706935245733897830597123563958705058989075147599290026879543541
@@ -387,6 +406,45 @@ def hw7():
         print(f"{plaintext=}")
     do_q(6, q6)
 
+def wkst2():
+    def q1():
+        print(f"a) {math.log(4, 2) % 43 =}")
+        print(f"b) {math.log(13, 5) % 43 =}")
+        print(f"c) {math.log(2, 4) % 89 =}")
+        print(f"d) {math.log(42, 21) % 89 =}")
+    do_q(1, q1)
+
+    def q2():
+        Z = 31
+    do_q(2, q2)
+
+    def q3():
+        pass
+    do_q(3, q3)
+
+def menu():
+    """
+    Prints the main menu
+    """
+    print("Main Menu")
+    print("-"*20)
+    print("1. Homework")
+    print("2. Worksheet")
+    print("3. Quit")
+    print("-"*20)
+
+def runner():
+    qtype = None
+    menu()
+    while True:
+        try:
+            qtype = int(input("Choice: "))
+            if 1 <= qtype <= 3:
+                break
+        except:
+            pass
+        print("Invalid input. Please try again...")
+    
 def main():
     # hw1()
     # hw2()
@@ -398,6 +456,8 @@ def main():
     # exam2()
     # hw6()
     hw7()
+    # wkst2()
+    # runner()
     pass
 
 if __name__ == "__main__":

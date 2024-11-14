@@ -1,7 +1,7 @@
 from math_things import *
 import random
 
-def generate_keys(p, q, e):
+def generate_keys(p:int, q:int, e:int):
     """
     Generates the keys for RSA
 
@@ -51,6 +51,21 @@ def RSA_decrypt(ciphertext, d, n):
     plaintext = sq_mult_table(ciphertext, d, n, show_table=False)
 
     return plaintext
+
+def generate_RSA_codebook(to_encode: list | tuple, pub_key: list[int] | tuple[int], encoding_func: callable = ord) -> dict:
+    """
+    Generates a codebook dictionary for RSA
+
+    :param to_encode: A list of the things to be encoded
+    :param pub_key: The public key (n, e) of the recipient
+    :param encoding_func: The function to encode, default is ASCII
+    :return codebook: The codebook dict
+    """
+    codebook = {}
+    n, e = pub_key
+    for i in to_encode:
+        codebook[sq_mult_table(encoding_func(i), e, n)] = i
+    return codebook
 
 def main():
     p, q, e = 3, 11, 3

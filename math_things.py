@@ -3,6 +3,7 @@ from tabulate import tabulate
 import math
 import sympy as sp
 from DES import pad_to
+import random
 
 def is_prime(n: int) -> bool:
     """
@@ -553,6 +554,59 @@ def crt(nums: list | tuple, in_mod: list | tuple, logging: bool = False, latex_l
 
 chinese_remainder_theorem = crt
 
+def fermat_primality_test(num: int, runs: int = 1, logging: bool = False):
+    """
+    Does the Fermat Primality Test
+
+    :param num: The prime candidate to test
+    :param runs: The number of times to run the test, each one increasing the probability that the result is correct
+    :param logging: Option to output the log of the runs, false by default
+    :return: If the number is prime or not based on the test
+    """
+    for _ in range(runs):
+        base = random.randint(2, num-2)
+        print(f"Testing base {base}: result = ", end="") if logging else None
+        calc = sq_mult_table(base, num-1, num)
+        print('prime' if calc == 1 else 'not prime') if logging else None
+        if calc != 1:
+            return False
+    return True
+
+def is_carmichael_number(num: int) -> bool:
+    """
+    Checks if a number is a Caarmichael
+
+    :param num: The number to check
+    """
+    if num%2==0:
+        return False
+    p_factors = get_prime_factors(num)
+    #TODO finish carmichael num
+
+def is_generator(num: int, ring: int) -> bool:
+    """
+    Checks if a number is a generator in a ring
+
+    :param num: The number to check
+    :param ring: The ring to check in
+    :return: If the number is a generator in the ring
+    """
+    #TODO finish is_generator
+    return False
+
+def find_generators(ring: int) -> list[int]:
+    """
+    Finds all generators in a ring. A generator is...
+
+    :param ring: The ring
+    :return gens: The list of generators
+    """
+    gens = []
+    for i in range(ring):
+        pass
+    #TODO finish find generators
+
+
 def main():
     # sq_mod_table(5, 20, 7)
     # gcd_show(29, 17)
@@ -561,6 +615,10 @@ def main():
     # print("")
     # display_table(tuple("x y x\' y\'".split()), e2, 30)
     # crt([1,2,3], [3,5,7], logging=True)
+    # p = generate_n_bit_prime(100)
+    # p=217839461
+    # print(f"{p=}")
+    # print(fermat_primality_test(p, 20, True))
     pass
 
 if __name__ == "__main__":
