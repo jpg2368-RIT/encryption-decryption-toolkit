@@ -507,7 +507,10 @@ def runner() -> None:
                 pass
             print("Invalid entry, try again.")
         print("-"*20)
-        (hw_list if qtype==1 else wkst_list)[num-1]()
+        try:
+            (hw_list if qtype==1 else wkst_list)[num-1]()
+        except:
+            pass
         input("Press enter to return to the main menu")
         print("-"*20)
 
@@ -520,10 +523,10 @@ def main():
     runner()
 
 if __name__ == "__main__":
-    if input("Interactive mode? (y/n): ").lower() == "y":
-        print("Starting interactive mode...\n")
-        while True:
-            exec(input(">>> "), globals())
-    else:
-        main()
+    # if input("Interactive mode? (y/n): ").lower() == "y":
+    #     print("Starting interactive mode...\n")
+    #     while True:
+    #         exec(input(">>> "), globals())
+    # else:
+    #     main()
     main()
