@@ -407,6 +407,7 @@ def hw7():
     do_q(6, q6)
 
 def wkst2():
+    #TODO finish worksheet code
     def q1():
         print(f"a) {math.log(4, 2) % 43 =}")
         print(f"b) {math.log(13, 5) % 43 =}")
@@ -430,21 +431,42 @@ def menu():
     print("-"*20)
     print("1. Homework")
     print("2. Worksheet")
-    print("3. Quit")
+    print("3. Exam")
+    print("4. Quit")
     print("-"*20)
 
-def runner():
+def runner() -> None:
     qtype = None
-    menu()
     while True:
-        try:
-            qtype = int(input("Choice: "))
-            if 1 <= qtype <= 3:
+        menu()
+        while True:
+            try:
+                qtype = int(input("Choice: "))
+                if 1 <= qtype <= 4:
+                    break
+            except:
+                pass
+            print("Invalid input. Please try again.")
+        if qtype == 4:
+            print("Exiting...")
+            return
+        num = None
+        while True:
+            try:
+                num = int(input(f"Enter {qtype_dict[qtype]} Number: "))
                 break
-        except:
-            pass
-        print("Invalid input. Please try again...")
+            except:
+                pass
+            print("Invalid entry, try again.")
+        print("-"*20)
+        (hw_list if qtype==1 else wkst_list)[num-1]()
     
+
+qtype_dict = {1: "Homework", 2: "Worksheet", 3: "Exam"}
+hw_list = [hw1, hw2, hw3, hw4, hw5, hw6, hw7]
+wkst_list = [wkst_temp, wkst2]
+exam_list =[exam1, exam2]
+
 def main():
     # hw1()
     # hw2()
@@ -455,9 +477,9 @@ def main():
     # hw5()
     # exam2()
     # hw6()
-    hw7()
+    # hw7()
     # wkst2()
-    # runner()
+    runner()
     pass
 
 if __name__ == "__main__":
