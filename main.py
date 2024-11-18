@@ -123,21 +123,27 @@ def hw2():
 def hw3():
     print(do_round("0"*32, "0"*32, "0"*64))
 
-def wkst_temp():
-    print(f"5^65 mod 7 = {(5**65)%7}")
-    print(f"phi of 140, 141, 142 = {euler_totient(140)}, {euler_totient(141)}, {euler_totient(142)}")
-    for n in range(16):
-        b = pad_to(bin(n)[2:], 4)
-        try:
-            init = []
-            for i in b:
-                init.append(int(i))
-            l = LFSR(initstate=init, fpoly=[4, 3, 1])
-            l.runFullPeriod()
-            l.info()
-            print("-"*50)
-        except:
-            continue
+def wkst4():
+    def q2():
+        print(f"5^65 mod 7 = {(5**65)%7}")
+    do_q(2,q2)
+
+    def q4():
+        print(f"phi of 140, 141, 142 = {euler_totient(140)}, {euler_totient(141)}, {euler_totient(142)}")
+        for n in range(16):
+            b = pad_to(bin(n)[2:], 4)
+            try:
+                init = []
+                for i in b:
+                    init.append(int(i))
+                l = LFSR(initstate=init, fpoly=[4, 3, 1])
+                l.runFullPeriod()
+                l.info()
+                print("-"*50)
+            except:
+                continue
+    do_q(3,q3)
+    
 
 def exam1():
     print(find_mod_inverse(7,14))
@@ -445,7 +451,7 @@ def hw7():
         print(f"{plaintext=}")
     do_q(6, q6)
 
-def wkst2():
+def wkst7():
     #TODO finish worksheet code
     def q1():
         print(f"a) {math.log(4, 2) % 43 =}")
@@ -504,21 +510,20 @@ def runner() -> None:
         (hw_list if qtype==1 else wkst_list)[num-1]()
         input("Press enter to return to the main menu")
         print("-"*20)
-    
 
 qtype_dict = {1: "Homework", 2: "Worksheet", 3: "Exam"}
 hw_list = [hw1, hw2, hw3, hw4, hw5, hw6, hw7]
-wkst_list = [wkst_temp, wkst2]
+wkst_list = [None, None, None, wkst4, None, None, wkst7]
 exam_list =[exam1, exam2]
 
 def main():
     runner()
 
 if __name__ == "__main__":
-    # if input("Interactive mode? (y/n): ").lower() == "y":
-    #     print("Starting interactive mode...\n")
-    #     while True:
-    #         exec(input(">>> "), globals())
-    # else:
-    #     main()
+    if input("Interactive mode? (y/n): ").lower() == "y":
+        print("Starting interactive mode...\n")
+        while True:
+            exec(input(">>> "), globals())
+    else:
+        main()
     main()
