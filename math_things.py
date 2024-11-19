@@ -606,6 +606,46 @@ def find_generators(ring: int) -> list[int]:
         pass
     #TODO finish find generators
 
+def nPr(n: int | float, r: int | float):
+    """
+    Permutation calculation ((n!)/((n-r)!))
+
+    :param n: The n value
+    :param r: The r value
+    :return: The result
+    """
+    return (math.factorial(n))/(math.factorial(n-r))
+
+def nCr(n: int | float, r: int | float):
+    """
+    Combination calculation
+
+    :param n: The n
+    :param r: The r
+    :return: The result
+    """
+    return math.factorial(n)/(math.factorial(r)*math.factorial(n-r))
+
+def birthday_collision_probability(num_of_people: int) -> float:
+    """
+    Finds the probability that, with some number of people, there will be multiple people will have the same birthday (assuming 365 days in a year)
+    (can only handle up to n=120)
+    
+    :param num_of_people: The amount of people in the group
+    :return: The probability that there will be a collision (multiple people with the same birthday)
+    """
+    return 1-((nPr(365, num_of_people))/(365**num_of_people))
+
+def num_hash_checked_before_collision(num_bits: int, prob_of_collision: float) -> float:
+    """
+    Computes how many hashes must be checked before two random vavlues will give the same output
+
+    :param num_bits: The number of bits in the hash function
+    :param prob_of_collision: The probability that there will be a collision
+    :return: The number of hashes to check before a collision
+    """
+
+    return 2**((num_bits+1)/2) * math.sqrt(math.log((1)/(1-prob_of_collision)))
 
 def main():
     # sq_mod_table(5, 20, 7)
@@ -619,6 +659,9 @@ def main():
     # p=217839461
     # print(f"{p=}")
     # print(fermat_primality_test(p, 20, True))
+    for i in range(150):
+        print(f"Trying {i}...")
+        print(birthday_collision_probability(i))
     pass
 
 if __name__ == "__main__":

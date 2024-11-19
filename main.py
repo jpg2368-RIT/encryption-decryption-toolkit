@@ -4,9 +4,13 @@ from math_things import *
 from DES import *
 from AES import *
 from RSA import *
+from DHKE import *
+from ElGamal import *
+from hashing import *
+# import hashlib
 from tests import time_exec
 
-def do_q(q_num: int, q_func) -> None:
+def do_q(q_num: int, q_func: callable) -> None:
     """
     Does a question
 
@@ -17,11 +21,11 @@ def do_q(q_num: int, q_func) -> None:
     q_func()
     print("-"*100,"\n")
 
-def hw1():
+def hw1() -> None:
     print(find_mod_inverse(7, 26))
     print(affine_decrypt("zuqtqgsytqvrsdqztwvaoyajramjazi", 7, 22))
 
-def hw2():
+def hw2() -> None:
     for k in [11, 12, 13]:
         print(f"5^-1 in mod {k} = {find_mod_inverse(5, k)}")
     
@@ -120,10 +124,10 @@ def hw2():
             print("-"*40)
     do_q(8,q8)
 
-def hw3():
+def hw3() -> None:
     print(do_round("0"*32, "0"*32, "0"*64))
 
-def wkst4():
+def wkst4() -> None:
     def q2():
         print(f"5^65 mod 7 = {(5**65)%7}")
     do_q(2,q2)
@@ -143,9 +147,8 @@ def wkst4():
             except:
                 continue
     do_q(3,q3)
-    
 
-def exam1():
+def exam1() -> None:
     print(find_mod_inverse(7,14))
     print(find_mod_inverse(9,14))
     
@@ -172,7 +175,7 @@ def exam1():
 
     print(f"gcd(1072,224) = {gcd(1072,224, True)}")
 
-def hw4():
+def hw4() -> None:
     #Q1
     def q1():
         for n in (1033, 1034, 1035, 1036):
@@ -231,7 +234,7 @@ def hw4():
             print(f"\t{p}")
     do_q(6,q6)
     
-def hw5():
+def hw5() -> None:
     # Q1
     def q1():
         field = sp.GF(2)
@@ -289,7 +292,7 @@ def hw5():
         print(f"Result of inv_mix_col = {imc}")
     do_q(6,q6)
 
-def exam2():
+def exam2() -> None:
     # Q2
     print(hex(hex_poly_mult(0xDD, 0xF9)))
 
@@ -316,7 +319,7 @@ def exam2():
     res = poly_inv(p, irrp, True)
     print(f"poly_inv = {res.as_expr()}")
 
-def hw6():
+def hw6() -> None:
     # Q2
     def q2():
         for m in [8, 10]:
@@ -347,7 +350,7 @@ def hw6():
         print(f"1234567^23456789 mod 3333337 = {sq_mult_table(1234567, 23456789, 3333337, format='latex')}")
     do_q(5,q5)
 
-def hw7():
+def hw7() -> None:
     # Q1
     def q1():
         def p1():
@@ -451,7 +454,7 @@ def hw7():
         print(f"{plaintext=}")
     do_q(6, q6)
 
-def wkst7():
+def wkst7() -> None:
     #TODO finish worksheet code
     def q1():
         print(f"a) {math.log(4, 2) % 43 =}")
@@ -468,7 +471,7 @@ def wkst7():
         pass
     do_q(3, q3)
 
-def menu():
+def menu() -> None:
     """
     Prints the main menu
     """
