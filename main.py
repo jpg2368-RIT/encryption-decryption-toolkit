@@ -487,8 +487,26 @@ def wkst7() -> None:
 
 def hw8():
     def q1():
-        pass
-    do_q(1,q1)
+        for p, alph, a, b in [[467, 2, 3, 5], [467, 2, 400, 134], [467, 2, 228, 57]]:
+            pub1 = compute_pub_key(a, p, alph)
+            pub2 = compute_pub_key(b, p, alph)
+            com = compute_common_key(a, pub2, p)
+            print(f"Public keys: {pub1}, {pub2}. Common key: {com}")
+    do_q(1, q1)
+
+    def q4():
+        discrete_log_problem(11, 7, 13, True)
+    do_q(4, q4)
+
+    def q5():
+        for n, base, mod in [[2, 3, 11],
+                             [3, 2, 19],
+                             [3, 3, 97],
+                             [3, 4, 97],
+                             [4, 3, 97],
+                             [43, 3, 97]]:
+            print(f"{base}^x = {n} mod {mod} -> x = {discrete_log_problem(n,base, mod)}")
+    do_q(5,q5)
 
 def menu() -> None:
     """
