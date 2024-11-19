@@ -585,26 +585,36 @@ def is_carmichael_number(num: int) -> bool:
 
 def is_generator(num: int, ring: int) -> bool:
     """
-    Checks if a number is a generator in a ring
+    Checks if a number is a generator in a ring (same thing as a primitive element)
 
     :param num: The number to check
     :param ring: The ring to check in
     :return: If the number is a generator in the ring
     """
-    #TODO finish is_generator
-    return False
+    return sp.is_primitive_root(num, ring)
 
 def find_generators(ring: int) -> list[int]:
     """
-    Finds all generators in a ring. A generator is...
+    Finds all generators in a ring. A generator is the same thing as a primitive element
 
     :param ring: The ring
     :return gens: The list of generators
     """
-    gens = []
-    for i in range(ring):
-        pass
-    #TODO finish find generators
+    return prim_elements_in(ring)
+
+def discrete_log_problem(n: int | float, base: int | float, mod: int) -> int | None:
+    """
+    Finds the value of x to satisfy base^x = n mod mod
+
+    :param n: The target number
+    :param base: The base
+    :param mod: The ring
+    :return: The x if it exists, else None
+    """
+    for i in range(mod):
+        if pow(base,i,mod) == n:
+            return i
+    return None
 
 def nPr(n: int | float, r: int | float):
     """
@@ -659,9 +669,6 @@ def main():
     # p=217839461
     # print(f"{p=}")
     # print(fermat_primality_test(p, 20, True))
-    for i in range(150):
-        print(f"Trying {i}...")
-        print(birthday_collision_probability(i))
     pass
 
 if __name__ == "__main__":

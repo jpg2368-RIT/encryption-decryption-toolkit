@@ -457,19 +457,38 @@ def hw7() -> None:
 def wkst7() -> None:
     #TODO finish worksheet code
     def q1():
-        print(f"a) {math.log(4, 2) % 43 =}")
-        print(f"b) {math.log(13, 5) % 43 =}")
-        print(f"c) {math.log(2, 4) % 89 =}")
-        print(f"d) {math.log(42, 21) % 89 =}")
+        print(f"a) {discrete_log_problem(4, 2, 43)}")
+        print(f"b) {discrete_log_problem(13, 5, 43)}")
+        print(f"c) {discrete_log_problem(2, 4, 89)}")
+        print(f"d) {discrete_log_problem(42, 21, 89)}")
     do_q(1, q1)
 
     def q2():
         Z = 31
+        print(prim_elements_in(Z))
     do_q(2, q2)
 
     def q3():
-        pass
+        p = 163
+        alpha = 3
+        print(f"{is_generator(3, 163)}")
+        a, b = 5, 7
+        pub1 = compute_pub_key(a, p, alpha)
+        pub2 = compute_pub_key(b, p, alpha)
+        com = compute_common_key(a, pub2, p)
+        print(f"i) Public keys: {pub1}, {pub2}. Common key: {com}")
+
+        a, b = 101, 150
+        pub1 = compute_pub_key(a, p, alpha)
+        pub2 = compute_pub_key(b, p, alpha)
+        com = compute_common_key(a, pub2, p)
+        print(f"ii) Public keys: {pub1}, {pub2}. Common key: {com}")
     do_q(3, q3)
+
+def hw8():
+    def q1():
+        pass
+    do_q(1,q1)
 
 def menu() -> None:
     """
@@ -518,7 +537,7 @@ def runner() -> None:
         print("-"*20)
 
 qtype_dict = {1: "Homework", 2: "Worksheet", 3: "Exam"}
-hw_list = [hw1, hw2, hw3, hw4, hw5, hw6, hw7]
+hw_list = [hw1, hw2, hw3, hw4, hw5, hw6, hw7, hw8]
 wkst_list = [None, None, None, wkst4, None, None, wkst7]
 exam_list =[exam1, exam2]
 
