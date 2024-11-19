@@ -494,6 +494,27 @@ def hw8():
             print(f"Public keys: {pub1}, {pub2}. Common key: {com}")
     do_q(1, q1)
 
+    def q2():
+        p = 467
+        alph = 4
+        for a, b in [[400, 134], [167, 134]]:
+            pub1 = compute_pub_key(a, p, alph)
+            pub2 = compute_pub_key(b, p, alph)
+            com = compute_common_key(a, pub2, p)
+            print(f"Public keys: {pub1}, {pub2}. Common key: {com}")
+
+    do_q(2,q2)
+
+    def q3():
+        z = 4973
+        gens = find_generators(z)
+        print(f"{len(gens)=}")
+        for n in gens.copy():
+            if n < 1000:
+                gens.remove(n)
+        print(f"Third smallest greater than 1000 = {gens[2]}")
+    do_q(3,q3)
+
     def q4():
         discrete_log_problem(11, 7, 13, True)
     do_q(4, q4)
@@ -551,7 +572,7 @@ def runner() -> None:
             (hw_list if qtype==1 else wkst_list)[num-1]()
         except:
             pass
-        input("Press enter to return to the main menu")
+        input("Press enter to return to the main menu...")
         print("-"*20)
 
 qtype_dict = {1: "Homework", 2: "Worksheet", 3: "Exam"}
