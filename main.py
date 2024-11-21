@@ -529,7 +529,11 @@ def hw8():
     do_q(5,q5)
 
     def q6():
-        pass
+        z = 31
+        alpha = 3
+        beta = 30
+        keys = find_masking_keys(z, beta)
+        print(keys)
     do_q(6,q6)
 
 def wkst8():
