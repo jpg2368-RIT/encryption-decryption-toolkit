@@ -21,7 +21,7 @@ def generate_keys(p:int, q:int, e:int):
     # return public key (n, e) and private key d
     return (n, e), d
 
-def RSA_encrypt(plaintext: int, p:int, q:int, e:int):
+def encrypt(plaintext: int, p:int, q:int, e:int):
     """
     Does RSA encryption
 
@@ -38,7 +38,7 @@ def RSA_encrypt(plaintext: int, p:int, q:int, e:int):
     ciphertext = sq_mult_table(plaintext, e, pub_key[0], show_table=False)
     return ciphertext, priv_key
 
-def RSA_decrypt(ciphertext, d, n):
+def decrypt(ciphertext, d, n):
     """
     Does RSA decryption
 
@@ -52,7 +52,7 @@ def RSA_decrypt(ciphertext, d, n):
 
     return plaintext
 
-def generate_RSA_codebook(to_encode: list | tuple, pub_key: list[int] | tuple[int], encoding_func: callable = ord) -> dict:
+def generate_codebook(to_encode: list | tuple, pub_key: list[int] | tuple[int], encoding_func: callable = ord) -> dict:
     """
     Generates a codebook dictionary for RSA
 
@@ -72,9 +72,9 @@ def main():
     n = p*q
     plaintext = 0x04
     print(f"{plaintext=:x}")
-    ct, d = RSA_encrypt(0x04, p, q, e)
+    ct, d = encrypt(0x04, p, q, e)
     print(f"{ct=}")
-    pt = RSA_decrypt(ct, d, n)
+    pt = decrypt(ct, d, n)
     print(f"{pt=:x}")
     print(f"{generate_n_bit_prime(400, True)=:,}")
     ns = []

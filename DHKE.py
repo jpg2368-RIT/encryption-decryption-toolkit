@@ -13,10 +13,10 @@ def compute_priv_key(alpha, d, ring):
     priv_key = pow(alpha, d, ring)
     return priv_key
 
-def DHKE_encrypt(p: int, alpha: int, priv_key:int) -> int:
+def encrypt(p: int, alpha: int, priv_key:int) -> int:
     # compute public key
     pub_key = compute_pub_key(pub_key, p, alpha)
     pass
 
-def DHKE_decrypt():
+def decrypt():
     pass

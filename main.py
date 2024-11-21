@@ -1,11 +1,11 @@
 from LFSRs import *
 from text_ciphers import *
 from math_things import *
-from DES import *
-from AES import *
-from RSA import *
-from DHKE import *
-from ElGamal import *
+import DES
+import AES
+import RSA
+import DHKE
+import ElGamal
 from hashing import *
 # import hashlib
 from tests import time_exec
@@ -125,7 +125,7 @@ def hw2() -> None:
     do_q(8,q8)
 
 def hw3() -> None:
-    print(do_round("0"*32, "0"*32, "0"*64))
+    print(DES.do_round("0"*32, "0"*32, "0"*64))
 
 def wkst4() -> None:
     def q2():
@@ -146,18 +146,18 @@ def wkst4() -> None:
                 print("-"*50)
             except:
                 continue
-    do_q(3,q3)
+    do_q(3,q4)
 
 def exam1() -> None:
     print(find_mod_inverse(7,14))
     print(find_mod_inverse(9,14))
     
-    print(do_permutation("01001001010000111110100101000111", f_Perm))
+    print(DES.do_permutation("01001001010000111110100101000111", DES.f_Perm))
     
     x1 = "000000"
     x2 = "101010"
-    print(pad_to(bin(int(do_S(x1, 5),2) ^ int(do_S(x2,5),2))[2:],4)) #idk
-    print(pad_to(do_S(bin(int(x1,2) ^ int(x2,2))[2:], 5),4)) #idk
+    print(pad_to(bin(int(DES.do_S(x1, 5),2) ^ int(DES.do_S(x2,5),2))[2:],4)) #idk
+    print(pad_to(DES.do_S(bin(int(x1,2) ^ int(x2,2))[2:], 5),4)) #idk
     
     print(euler_totient(224, True))
     
@@ -271,7 +271,7 @@ def hw5() -> None:
     # Q4
     def q4():
         for n in [0x29, 0xf3]:
-            print(f"sbox(0x{n:x}) = 0x{do_s_box(f'{n:x}')}")
+            print(f"sbox(0x{n:x}) = 0x{AES.do_s_box(f'{n:x}')}")
     do_q(4,q4)
 
     # Q5
@@ -282,10 +282,10 @@ def hw5() -> None:
     # Q6
     def q6():
         col = [[0x87], [0x6E], [0x46], [0xA6]]
-        mc = mix_column(col)
+        mc = AES.mix_column(col)
         for n in mc:
             n[0] = hex(n[0])
-        imc = mix_column(col, inv=True)
+        imc = AES.mix_column(col, inv=True)
         for n in imc:
             n[0] = hex(n[0])
         print(f"Result of mix_col = {mc}")
@@ -307,7 +307,7 @@ def exam2() -> None:
     print(f"Num of prim elements in GF(23): {len(prim_elements_in(23))}")
 
     # Q13
-    inv_col = mix_column([[0xFF], [0x94], [0x9c], [0x6E]], True)
+    inv_col = AES.mix_column([[0xFF], [0x94], [0x9c], [0x6E]], True)
     for i in range(len(inv_col)):
         inv_col[i][0] = hex(inv_col[i][0])
     print(f"{inv_col=}")
@@ -362,9 +362,9 @@ def hw7() -> None:
             phi_n = euler_totient(n)
             # e = mod_inv(d, phi_n)
             e = sp.mod_inverse(d, phi_n)
-            ct, _ = RSA_encrypt(x, p, q, e)
+            ct, _ = RSA.encrypt(x, p, q, e)
             print(f"\t{ct=}")
-            pt = RSA_decrypt(ct, d, n)
+            pt = RSA.decrypt(ct, d, n)
             print(f"\t{pt=}")
 
         def p2():
@@ -373,11 +373,11 @@ def hw7() -> None:
             e = 3
             x = 9
 
-            ct, pk = RSA_encrypt(x, p, q, e)
+            ct, pk = RSA.encrypt(x, p, q, e)
             d = pk
             n = p*q
             print(f"\t{ct=}")
-            pt = RSA_decrypt(ct, d, n)
+            pt = RSA.decrypt(ct, d, n)
             print(f"\t{pt=}")
 
         print("part 1:")
@@ -421,7 +421,7 @@ def hw7() -> None:
         chars = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
         n = 3763
         e = 11
-        cb = generate_RSA_codebook(chars, (n, e))
+        cb = RSA.generate_codebook(chars, (n, e))
         print(cb)
         for ct in [2912, 2929, 3368, 153, 3222, 3335, 153, 1222]:
             print(f"{ct} -> {cb[ct]}")
@@ -438,7 +438,7 @@ def hw7() -> None:
         print(f"{phi_n=}")
         d = sp.mod_inverse(e, phi_n)
         print(f"{d=}")
-        plaintext = RSA_decrypt(y, d, n)
+        plaintext = RSA.decrypt(y, d, n)
         plaintext = str(plaintext)
         plaintext = ("0" + plaintext) if len(plaintext) % 2 != 0 else plaintext
         def convert(pt: str):
@@ -447,7 +447,7 @@ def hw7() -> None:
                 l = chr(A_NUM-1 + int(num))
                 return l if l != "@" else " "
             ret = ""
-            for n in split_bits(pt, per_group=2):
+            for n in DES.split_bits(pt, per_group=2):
                 ret += to_letter(n)
             return ret
         plaintext = convert(plaintext)
@@ -472,24 +472,24 @@ def wkst7() -> None:
         alpha = 3
         print(f"{is_generator(3, 163)}")
         a, b = 5, 7
-        pub1 = compute_pub_key(a, p, alpha)
-        pub2 = compute_pub_key(b, p, alpha)
-        com = compute_common_key(a, pub2, p)
+        pub1 = DHKE.compute_pub_key(a, p, alpha)
+        pub2 = DHKE.compute_pub_key(b, p, alpha)
+        com = DHKE.compute_common_key(a, pub2, p)
         print(f"i) Public keys: {pub1}, {pub2}. Common key: {com}")
 
         a, b = 101, 150
-        pub1 = compute_pub_key(a, p, alpha)
-        pub2 = compute_pub_key(b, p, alpha)
-        com = compute_common_key(a, pub2, p)
+        pub1 = DHKE.compute_pub_key(a, p, alpha)
+        pub2 = DHKE.compute_pub_key(b, p, alpha)
+        com = DHKE.compute_common_key(a, pub2, p)
         print(f"ii) Public keys: {pub1}, {pub2}. Common key: {com}")
     do_q(3, q3)
 
 def hw8():
     def q1():
         for p, alph, a, b in [[467, 2, 3, 5], [467, 2, 400, 134], [467, 2, 228, 57]]:
-            pub1 = compute_pub_key(a, p, alph)
-            pub2 = compute_pub_key(b, p, alph)
-            com = compute_common_key(a, pub2, p)
+            pub1 = DHKE.compute_pub_key(a, p, alph)
+            pub2 = DHKE.compute_pub_key(b, p, alph)
+            com = DHKE.compute_common_key(a, pub2, p)
             print(f"Public keys: {pub1}, {pub2}. Common key: {com}")
     do_q(1, q1)
 
@@ -497,9 +497,9 @@ def hw8():
         p = 467
         alph = 4
         for a, b in [[400, 134], [167, 134]]:
-            pub1 = compute_pub_key(a, p, alph)
-            pub2 = compute_pub_key(b, p, alph)
-            com = compute_common_key(a, pub2, p)
+            pub1 = DHKE.compute_pub_key(a, p, alph)
+            pub2 = DHKE.compute_pub_key(b, p, alph)
+            com = DHKE.compute_common_key(a, pub2, p)
             print(f"Public keys: {pub1}, {pub2}. Common key: {com}")
 
     do_q(2,q2)
@@ -532,8 +532,13 @@ def hw8():
         z = 31
         alpha = 3
         beta = 30
-        keys = find_masking_keys(z, beta)
+        keys = ElGamal.find_masking_keys(z, beta)
         print(keys)
+        cts = (26, 29), (14, 17), (None, 27), (None, 12), (None, 0), (None, 2), (21, 27), (30, 17), (17, 11), (13, 13)
+        def decode(n):
+            return list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")[n]
+        decrypted = ElGamal.force_decrypt(cts, alpha, z, keys, decode)
+        print(decrypted)
     do_q(6,q6)
 
 def wkst8():

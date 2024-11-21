@@ -195,7 +195,7 @@ def compute_keys(key: str) -> list:
     return keys
 
 #TODO Fix DES_encrypt
-def DES_encrypt(plaintext: str, key: str) -> str:
+def encrypt(plaintext: str, key: str) -> str:
     ciphertext = ""
     # break into 64 bit chunks and pad
     chunks = split_bits(plaintext, per_group=64)
@@ -224,7 +224,7 @@ def DES_encrypt(plaintext: str, key: str) -> str:
     return ciphertext
 
 #TODO DES_decrypt
-def DES_decrypt(ciphertext, keystream):
+def decrypt(ciphertext, keystream):
     plaintext = ""
     return plaintext
 
