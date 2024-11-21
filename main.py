@@ -455,7 +455,6 @@ def hw7() -> None:
     do_q(6, q6)
 
 def wkst7() -> None:
-    #TODO finish worksheet code
     def q1():
         print(f"a) {discrete_log_problem(4, 2, 43)}")
         print(f"b) {discrete_log_problem(13, 5, 43)}")
@@ -529,6 +528,23 @@ def hw8():
             print(f"{base}^x = {n} mod {mod} -> x = {discrete_log_problem(n,base, mod)}")
     do_q(5,q5)
 
+    def q6():
+        pass
+    do_q(6,q6)
+
+def wkst8():
+    def q1():
+        for t in [10, 25, 40]:
+            print(f"{t}: {birthday_collision_probability(t):%}")
+    do_q(1,q1)
+
+    def q2():
+        for bits in [64, 128, 256]:
+            for prob in [.1, .5, .99]:
+                print(f"{bits=}, {prob=}: {round(num_hash_checked_before_collision(bits, prob)):e} tries")
+            print("")
+    do_q(2,q2)
+
 def menu() -> None:
     """
     Prints the main menu
@@ -577,7 +593,7 @@ def runner() -> None:
 
 qtype_dict = {1: "Homework", 2: "Worksheet", 3: "Exam"}
 hw_list = [hw1, hw2, hw3, hw4, hw5, hw6, hw7, hw8]
-wkst_list = [None, None, None, wkst4, None, None, wkst7]
+wkst_list = [None, None, None, wkst4, None, None, wkst7, wkst8]
 exam_list =[exam1, exam2]
 
 def main():

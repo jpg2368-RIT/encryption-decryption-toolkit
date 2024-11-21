@@ -602,7 +602,7 @@ def find_generators(ring: int) -> list[int]:
     """
     return prim_elements_in(ring)
 
-def discrete_log_problem(n: int | float, base: int | float, mod: int, log: bool = False) -> int | None:
+def discrete_log_problem(n: int | float, base: int | float, mod: int, log: bool = False) -> list:
     """
     Finds the value of x to satisfy base^x = n mod mod
 
@@ -610,16 +610,17 @@ def discrete_log_problem(n: int | float, base: int | float, mod: int, log: bool 
     :param base: The base
     :param mod: The ring
     :param log: Logs the output, false by default
-    :return: The x if it exists, else None
+    :return: A list of all answers
     """
     print(f"Solving for x in {base}^x = {n} mod {mod}") if log else None
+    ans = []
     for x in range(mod):
         num = pow(base, x, mod)
         print(f"{base}^{x} = {num} mod {mod}") if log else None
         if num == n:
             print(f"Solution found: x = {x}") if log else None
-            return x
-    return None
+            ans.append(x)
+    return ans
 
 def nPr(n: int | float, r: int | float):
     """
