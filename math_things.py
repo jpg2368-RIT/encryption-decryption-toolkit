@@ -298,14 +298,17 @@ def prim_elements_in(z: int) -> list:
             continue
     return prims
 
-def last_n_digits(num: int, digits: int):
+def last_n_digits(num: int, n: int) -> str:
     """
     Returns the last n digits of a number mathemetically
     
     :param num: The number
-    :param digits: How many last digits to get
+    :param n: How many last digits to get
     """
-    return pad_to(str(num%(10**digits)), digits)
+    return str(num%(10**n)).zfill(n)
+
+def last_n_digits_euler(number:int, n:int) -> str:
+    pass
 
 def russian_peasant_algo(a: int, b: int, format = "outline", testing = False):
     # a, b = min(a, b), max(a, b)
@@ -569,6 +572,33 @@ def fermat_primality_test(num: int, runs: int = 1, logging: bool = False):
         calc = sq_mult_table(base, num-1, num)
         print('prime' if calc == 1 else 'not prime') if logging else None
         if calc != 1:
+            return False
+    return True
+
+def get_factors(n) -> list:
+    """
+    Gets all factors of a number
+
+    :param n: The number to get factors of
+    :return factor_list: The list of factors
+    """
+    factor_list = []
+    for i in range(1, n+1):
+        if n%i==0:
+            factor_list.append(i)
+    return factor_list
+
+def is_semi_prime(n) -> bool:
+    """
+    Determines if a number is a semi-prime, that is, all factors of a number are primes aside from 1 and itself
+
+    :param n: The number to check if it is a semi-prime
+    """
+    factors = get_factors(n)
+    factors.remove(1)
+    factors.remove(n)
+    for factor in factors:
+        if not is_prime(factor):
             return False
     return True
 
