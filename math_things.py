@@ -543,7 +543,7 @@ def crt(nums: list | tuple, in_mod: list | tuple, logging: bool = False, latex_l
     M: int = PI(in_mod)
     for i in range(len(nums)):
         a = nums[i]
-        c= int(M/in_mod[i])
+        c = int(M/in_mod[i])
         b = sp.mod_inverse(c, in_mod[i])
         log1.append(f"({a}{times}{b}{times}{c})")
         log2.append(f"{PI([a,b,c])}")
@@ -671,6 +671,32 @@ def nCr(n: int | float, r: int | float):
     :return: The result
     """
     return math.factorial(n)/(math.factorial(r)*math.factorial(n-r))
+
+def probability_of_random_prime_up_to_n(n: int):
+    return 1/num_primes_up_to_n(n)
+
+def probability_of_random_prime_of_only_n_bits(n: int):
+    return 1/num_primes_of_n_bits(n)
+
+def num_primes_up_to_n(n: int):
+    """
+    Approximates the number of prime numbers up to a number
+
+    :param n: The number to find primes up to
+    :return: The number of primes up to n
+    """
+    return n/math.log(n)
+
+def num_primes_of_n_bits(bits: int):
+    """
+    Finds the number of primes of only n bits
+
+    :param bits: The number of bits
+    :return: The number of primes of only n bits
+    """
+    below = num_primes_up_to_n(2**(bits-1))
+    all = num_primes_up_to_n(2**bits)
+    return all - below
 
 def birthday_collision_probability(num_of_people: int) -> float:
     """

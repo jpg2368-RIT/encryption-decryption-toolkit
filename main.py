@@ -400,8 +400,20 @@ def hw7() -> None:
         print(f"{exp*np.log(2)=}")
         print(f"{2/(exp * np.log(2))=}")
         print(f"1/{exp*np.log(2)/2}")
+        # print(f"{num_primes_up_to_n(2**exp)=}")
         print("")
 
+        # part b
+        # Correct below
+        # exp = 2051
+        # use prime number theorem to get the below
+        # primes_up_to = 1.82 * 10**614
+        # primes_up_to_one_less = 9.1 * 10**614
+        # primes_of_only = primes_up_to - primes_up_to_one_less
+        # print(primes_of_only)
+        # print(f"{num_primes_of_n_bits(2**exp)=}")
+        
+        # WRONG BELOW
         exp = 2051
         print(f"{exp*np.log(2)=}")
         print(f"{2/(exp * np.log(2))=}")
