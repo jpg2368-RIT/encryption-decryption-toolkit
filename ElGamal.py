@@ -32,10 +32,10 @@ def force_decrypt(ciphertexts: list[list[int] | tuple[int]] | tuple[list[int] | 
             plaintext.append([x])
         else:
             # find all possible outputs
-            possible = []
+            possible = set()
             for k_m in possible_masking_keys:
                 x = k_2 * sp.mod_inverse(k_m, p) % p
-                possible.append(x)
+                possible.add(x)
             plaintext.append(possible)
     
     if decoding_func is None:

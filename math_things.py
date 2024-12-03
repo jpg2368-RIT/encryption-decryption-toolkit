@@ -610,7 +610,8 @@ def is_carmichael_number(num: int) -> bool:
     """
     if num%2==0:
         return False
-    p_factors = get_prime_factors(num)
+    # check up to sqrt(n)
+    p_factors = get_prime_factors(math.ceil(math.sqrt(num)))
     #TODO finish carmichael num
 
 def is_generator(num: int, ring: int) -> bool:
@@ -631,6 +632,15 @@ def find_generators(ring: int) -> list[int]:
     :return gens: The list of generators
     """
     return prim_elements_in(ring)
+
+def num_of_generators(ring:int) -> int:
+    """
+    Calculates the number of generators in a ring
+
+    :param ring: The ring
+    :return: The number of generators in the ring
+    """
+    return euler_totient(euler_totient(ring))
 
 def discrete_log_problem(n: int | float, base: int | float, mod: int, log: bool = False) -> list:
     """
@@ -731,6 +741,7 @@ def main():
     # p=217839461
     # print(f"{p=}")
     # print(fermat_primality_test(p, 20, True))
+    print(num_of_generators(4973))
     pass
 
 if __name__ == "__main__":

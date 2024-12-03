@@ -566,6 +566,21 @@ def wkst8():
             print("")
     do_q(2,q2)
 
+    def q4():
+        n = 9797
+        e = 131
+        def check_validity(x, sigx):
+            return False
+        for x, sigx in [[123, 6292], [4333, 4768], [4333, 1424]]:
+            check_validity(x, sigx)
+    do_q(4,q4)
+
+    def q5():
+        n = 9797
+        e = 131
+        x = 200
+    do_q(5,q5)
+
 def menu() -> None:
     """
     Prints the main menu
