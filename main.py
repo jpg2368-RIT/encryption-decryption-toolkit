@@ -556,7 +556,7 @@ def hw8():
 def wkst8():
     def q1():
         for t in [10, 25, 40]:
-            print(f"{t}: {birthday_collision_probability(t):%}")
+            print(f"{t}: {1-birthday_collision_probability(t):%}")
     do_q(1,q1)
 
     def q2():
@@ -569,17 +569,15 @@ def wkst8():
     def q4():
         n = 9797
         e = 131
-        def check_validity(x, sigx):
-            return False
         for x, sigx in [[123, 6292], [4333, 4768], [4333, 1424]]:
-            check_validity(x, sigx)
+            print(sigx**e%n==x)
     do_q(4,q4)
 
-    def q5():
-        n = 9797
-        e = 131
-        x = 200
-    do_q(5,q5)
+    # def q5():
+    #     n = 9797
+    #     e = 131
+    #     x = 200
+    # do_q(5,q5)
 
 def menu() -> None:
     """
